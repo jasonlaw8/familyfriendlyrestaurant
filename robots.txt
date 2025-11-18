@@ -1,0 +1,16 @@
+# robots.txt for Bay Area Family Eats
+
+# Allow all search engines
+User-agent: *
+Allow: /
+
+# Disallow admin areas (when implemented)
+Disallow: /admin/
+Disallow: /api/
+Disallow: /private/
+
+# Sitemap location
+Sitemap: https://bayareafamilyeats.com/sitemap.xml
+
+# Crawl-delay (optional, adjust based on server capacity)
+Crawl-delay: 1

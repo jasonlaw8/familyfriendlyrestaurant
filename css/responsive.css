@@ -1,0 +1,447 @@
+/* ===================================
+   RESPONSIVE DESIGN - MOBILE FIRST
+   =================================== */
+
+/* Tablet - 768px and up */
+@media (max-width: 768px) {
+    :root {
+        --spacing-xl: 2.5rem;
+        --spacing-xxl: 3rem;
+    }
+
+    h1 { font-size: 2rem; }
+    h2 { font-size: 1.75rem; }
+    h3 { font-size: 1.25rem; }
+
+    /* Navigation */
+    .nav-links {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background: white;
+        flex-direction: column;
+        gap: 0;
+        box-shadow: var(--shadow-md);
+        padding: var(--spacing-md);
+    }
+
+    .nav-links.active {
+        display: flex;
+    }
+
+    .nav-links a {
+        padding: var(--spacing-sm);
+        border-bottom: 1px solid var(--bg-gray);
+    }
+
+    .mobile-menu-toggle {
+        display: flex;
+    }
+
+    /* Hero Section */
+    .hero {
+        min-height: 500px;
+        padding: var(--spacing-xl) 0;
+    }
+
+    .hero-title {
+        font-size: 2rem;
+    }
+
+    .hero-subtitle {
+        font-size: 1rem;
+    }
+
+    .hero-search {
+        flex-direction: column;
+    }
+
+    .search-input-group {
+        min-width: 100%;
+    }
+
+    .search-btn {
+        width: 100%;
+    }
+
+    /* Filter Bar */
+    .filter-bar {
+        top: 60px;
+    }
+
+    .filter-content {
+        flex-direction: column;
+        gap: var(--spacing-sm);
+    }
+
+    .filter-group {
+        width: 100%;
+        min-width: 100%;
+    }
+
+    /* Restaurant Grid */
+    .restaurant-grid {
+        grid-template-columns: 1fr;
+        gap: var(--spacing-md);
+    }
+
+    /* Guides Grid */
+    .guides-grid {
+        grid-template-columns: 1fr;
+        gap: var(--spacing-md);
+    }
+
+    /* Reviews Grid */
+    .reviews-grid {
+        grid-template-columns: 1fr;
+    }
+
+    /* Section Headers */
+    .section-header h2 {
+        font-size: 1.75rem;
+    }
+
+    .section-header p {
+        font-size: 1rem;
+    }
+
+    /* Newsletter */
+    .newsletter-form {
+        flex-direction: column;
+    }
+
+    .newsletter-input {
+        width: 100%;
+    }
+
+    /* Footer */
+    .footer-content {
+        grid-template-columns: 1fr;
+        gap: var(--spacing-lg);
+    }
+
+    /* Stats Bar */
+    .stats-bar {
+        flex-direction: column;
+        gap: var(--spacing-sm);
+    }
+
+    /* Image Gallery */
+    .image-gallery {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .gallery-main {
+        grid-column: 1 / 3;
+        grid-row: 1;
+    }
+
+    .gallery-item {
+        height: 150px;
+    }
+
+    /* Card adjustments */
+    .card-footer {
+        flex-direction: column;
+        gap: var(--spacing-sm);
+        align-items: flex-start;
+    }
+
+    .card-cta {
+        width: 100%;
+        text-align: center;
+    }
+}
+
+/* Mobile - 480px and below */
+@media (max-width: 480px) {
+    :root {
+        --spacing-lg: 1.5rem;
+        --spacing-xl: 2rem;
+        --spacing-xxl: 2.5rem;
+    }
+
+    .container {
+        padding: 0 var(--spacing-sm);
+    }
+
+    h1 { font-size: 1.75rem; }
+    h2 { font-size: 1.5rem; }
+
+    /* Hero */
+    .hero {
+        min-height: 400px;
+    }
+
+    .hero-title {
+        font-size: 1.5rem;
+    }
+
+    .hero-subtitle {
+        font-size: 0.9375rem;
+    }
+
+    /* Section spacing */
+    .featured-section,
+    .guides-section,
+    .reviews-section,
+    .newsletter-section {
+        padding: var(--spacing-xl) 0;
+    }
+
+    /* Restaurant cards */
+    .card-image {
+        height: 180px;
+    }
+
+    .card-content {
+        padding: var(--spacing-sm);
+    }
+
+    .card-features {
+        gap: 4px;
+    }
+
+    .feature-tag {
+        font-size: 0.6875rem;
+        padding: 3px 8px;
+    }
+
+    /* Guide cards */
+    .guide-image {
+        height: 140px;
+    }
+
+    .guide-icon {
+        font-size: 3rem;
+    }
+
+    /* Newsletter */
+    .newsletter-content h2 {
+        font-size: 1.5rem;
+    }
+
+    /* Feature icons */
+    .feature-icons {
+        justify-content: center;
+    }
+
+    .feature-item {
+        min-width: 70px;
+    }
+
+    .feature-item-icon {
+        font-size: 1.5rem;
+    }
+
+    /* Image gallery - single column on very small screens */
+    .image-gallery {
+        grid-template-columns: 1fr;
+    }
+
+    .gallery-main {
+        grid-column: 1;
+    }
+
+    .gallery-item {
+        height: 200px;
+    }
+}
+
+/* Large Desktop - 1400px and up */
+@media (min-width: 1400px) {
+    .container {
+        max-width: 1320px;
+    }
+
+    .hero-title {
+        font-size: 3.5rem;
+    }
+
+    .section-header h2 {
+        font-size: 2.75rem;
+    }
+
+    .restaurant-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+/* ===================================
+   MOBILE OPTIMIZATION UTILITIES
+   =================================== */
+
+/* Touch-friendly buttons */
+@media (hover: none) {
+    .btn,
+    .card-cta,
+    .mobile-menu-toggle {
+        min-height: 44px;
+        min-width: 44px;
+    }
+
+    .filter-group select {
+        min-height: 44px;
+    }
+}
+
+/* Sticky mobile elements */
+@media (max-width: 768px) {
+    .sticky-mobile-cta {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: white;
+        padding: var(--spacing-sm);
+        box-shadow: 0 -4px 12px rgba(0,0,0,0.1);
+        z-index: 1000;
+        display: flex;
+        gap: var(--spacing-xs);
+    }
+
+    .sticky-mobile-cta .btn {
+        flex: 1;
+    }
+
+    /* Add bottom padding to body when sticky CTA is present */
+    body.has-sticky-cta {
+        padding-bottom: 80px;
+    }
+}
+
+/* ===================================
+   PRINT STYLES
+   =================================== */
+
+@media print {
+    .navbar,
+    .filter-bar,
+    .newsletter-section,
+    .footer,
+    .btn,
+    .sticky-mobile-cta {
+        display: none;
+    }
+
+    body {
+        font-size: 12pt;
+        line-height: 1.5;
+    }
+
+    .restaurant-card,
+    .guide-card,
+    .review-card {
+        break-inside: avoid;
+        box-shadow: none;
+        border: 1px solid var(--border-color);
+    }
+
+    a {
+        color: var(--text-primary);
+        text-decoration: underline;
+    }
+}
+
+/* ===================================
+   ACCESSIBILITY ENHANCEMENTS
+   =================================== */
+
+/* Focus styles for keyboard navigation */
+*:focus {
+    outline: 2px solid var(--primary-color);
+    outline-offset: 2px;
+}
+
+/* Reduced motion for users who prefer it */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+    :root {
+        --shadow-sm: 0 0 0 1px var(--border-color);
+        --shadow-md: 0 0 0 2px var(--border-color);
+        --shadow-lg: 0 0 0 3px var(--border-color);
+    }
+
+    .btn-outline {
+        border-width: 3px;
+    }
+
+    .feature-tag,
+    .tag {
+        border: 1px solid var(--border-color);
+    }
+}
+
+/* Dark mode support (optional - can be enabled later) */
+@media (prefers-color-scheme: dark) {
+    /* Dark mode variables would go here if implemented */
+}
+
+/* ===================================
+   ORIENTATION SPECIFIC STYLES
+   =================================== */
+
+@media (max-width: 768px) and (orientation: landscape) {
+    .hero {
+        min-height: 400px;
+    }
+
+    .hero-title {
+        font-size: 1.75rem;
+    }
+
+    .hero-search {
+        flex-direction: row;
+        flex-wrap: wrap;
+    }
+
+    .search-input-group {
+        flex: 1;
+        min-width: 200px;
+    }
+}
+
+/* ===================================
+   UTILITY CLASSES FOR RESPONSIVE
+   =================================== */
+
+/* Hide on mobile */
+.hide-mobile {
+    @media (max-width: 768px) {
+        display: none !important;
+    }
+}
+
+/* Show only on mobile */
+.show-mobile {
+    display: none !important;
+    @media (max-width: 768px) {
+        display: block !important;
+    }
+}
+
+/* Text alignment */
+@media (max-width: 768px) {
+    .mobile-text-center {
+        text-align: center !important;
+    }
+}
+
+/* Full width on mobile */
+@media (max-width: 768px) {
+    .mobile-full-width {
+        width: 100% !important;
+    }
+}

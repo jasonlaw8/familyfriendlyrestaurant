@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Search and filter family-friendly restaurants in the Bay Area. Find the perfect spot for your family with our advanced search features.">
+    <meta name="keywords" content="family restaurant search, Bay Area restaurants, kid-friendly dining">
+
+    <title>Search Family-Friendly Restaurants - Bay Area Family Eats</title>
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" href="/css/components.css">
+    <link rel="stylesheet" href="/css/responsive.css">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-content">
+                <a href="/" class="logo">
+                    <span class="logo-icon">🍽️</span>
+                    <span class="logo-text">Bay Area Family Eats</span>
+                </a>
+                <div class="nav-links">
+                    <a href="/">Home</a>
+                    <a href="/guides/">Guides</a>
+                    <a href="#about">About</a>
+                    <a href="#newsletter">Newsletter</a>
+                </div>
+                <button class="mobile-menu-toggle" aria-label="Toggle menu">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Search Header -->
+    <section style="background: var(--bg-light); padding: var(--spacing-lg) 0;">
+        <div class="container">
+            <h1 style="margin-bottom: var(--spacing-md);">Find Your Perfect Family Restaurant</h1>
+
+            <!-- Search Bar -->
+            <div style="background: white; padding: var(--spacing-md); border-radius: var(--radius-lg); box-shadow: var(--shadow-sm); margin-bottom: var(--spacing-md);">
+                <div style="display: flex; gap: var(--spacing-sm); flex-wrap: wrap;">
+                    <div class="search-input-group" style="flex: 1; min-width: 250px;">
+                        <span class="search-icon">🔍</span>
+                        <input type="text" id="search-input" placeholder="Search by name, cuisine, or keyword..." class="search-input" onkeyup="debounceSearch()">
+                    </div>
+                    <button class="btn btn-primary" onclick="performSearchOnPage()">Search</button>
+                </div>
+            </div>
+
+            <!-- Active Filters Display -->
+            <div id="activeFilters" style="display: flex; gap: var(--spacing-xs); flex-wrap: wrap;"></div>
+        </div>
+    </section>
+
+    <!-- Sticky Filter Bar -->
+    <div class="filter-bar" id="filterBar">
+        <div class="container">
+            <div class="filter-content">
+                <div class="filter-group">
+                    <label>Location</label>
+                    <select id="filter-location" onchange="applyFilters()">
+                        <option value="">All Areas</option>
+                        <option value="San Francisco">San Francisco</option>
+                        <option value="Oakland">Oakland</option>
+                        <option value="Berkeley">Berkeley</option>
+                        <option value="Palo Alto">Palo Alto</option>
+                        <option value="San Jose">San Jose</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label>Cuisine</label>
+                    <select id="filter-cuisine" onchange="applyFilters()">
+                        <option value="">All Cuisines</option>
+                        <option value="American">American</option>
+                        <option value="Italian">Italian</option>
+                        <option value="Mexican">Mexican</option>
+                        <option value="Asian">Asian</option>
+                        <option value="Pizza">Pizza</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label>Features</label>
+                    <select id="filter-features" onchange="applyFilters()">
+                        <option value="">All Features</option>
+                        <option value="highchairs">High Chairs</option>
+                        <option value="kids-menu">Kids Menu</option>
+                        <option value="play-area">Play Area</option>
+                        <option value="changing-table">Changing Table</option>
+                        <option value="outdoor">Outdoor Seating</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label>Age Range</label>
+                    <select id="filter-age" onchange="applyFilters()">
+                        <option value="">All Ages</option>
+                        <option value="toddler">Toddlers (0-3)</option>
+                        <option value="young">Young Kids (4-8)</option>
+                        <option value="tweens">Tweens (9-12)</option>
+                        <option value="teens">Teens (13+)</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label>Sort By</label>
+                    <select id="filter-sort" onchange="handleSort()">
+                        <option value="featured">Featured</option>
+                        <option value="rating">Highest Rated</option>
+                        <option value="reviews">Most Reviewed</option>
+                        <option value="name">Name (A-Z)</option>
+                        <option value="price-low">Price (Low to High)</option>
+                        <option value="price-high">Price (High to Low)</option>
+                    </select>
+                </div>
+                <button class="btn btn-secondary btn-sm" onclick="clearFilters()">Clear All</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Results Section -->
+    <section style="padding: var(--spacing-xxl) 0;">
+        <div class="container">
+            <!-- Results Header -->
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--spacing-lg); flex-wrap: wrap; gap: var(--spacing-sm);">
+                <h2 id="resultsCount" style="margin: 0;">Loading restaurants...</h2>
+                <div style="display: flex; gap: var(--spacing-sm); align-items: center;">
+                    <span style="font-size: 0.875rem; color: var(--text-secondary);">View:</span>
+                    <button class="btn btn-sm btn-outline" onclick="toggleView('grid')" id="gridViewBtn">Grid</button>
+                    <button class="btn btn-sm btn-secondary" onclick="toggleView('list')" id="listViewBtn">List</button>
+                </div>
+            </div>
+
+            <!-- Restaurant Grid -->
+            <div class="restaurant-grid" id="restaurantGrid">
+                <!-- Restaurants will be loaded here -->
+            </div>
+
+            <!-- Load More Button -->
+            <div class="text-center" style="margin-top: var(--spacing-xl);" id="loadMoreContainer">
+                <button class="btn btn-outline" onclick="loadMore()">Load More Restaurants</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Newsletter Section -->
+    <section class="newsletter-section" id="newsletter">
+        <div class="container">
+            <div class="newsletter-content">
+                <h2>Get Weekly Family Dining Recommendations</h2>
+                <p>Join 5,000+ Bay Area families discovering the best kid-friendly spots</p>
+
+                <form class="newsletter-form" onsubmit="submitNewsletter(event)">
+                    <input type="email" placeholder="Enter your email" required class="newsletter-input">
+                    <button type="submit" class="btn btn-primary">Subscribe</button>
+                </form>
+
+                <p class="newsletter-privacy">We respect your privacy. Unsubscribe anytime.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>Bay Area Family Eats</h4>
+                    <p>Helping families find the perfect dining experience since 2024</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Explore</h4>
+                    <ul>
+                        <li><a href="/search.html">All Restaurants</a></li>
+                        <li><a href="/guides/">Curated Guides</a></li>
+                        <li><a href="#about">About Us</a></li>
+                        <li><a href="#contact">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>For Restaurants</h4>
+                    <ul>
+                        <li><a href="#featured">Featured Listings</a></li>
+                        <li><a href="#add">Add Your Restaurant</a></li>
+                        <li><a href="#partner">Partner With Us</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Follow Us</h4>
+                    <div class="social-links">
+                        <a href="#" aria-label="Instagram">📷</a>
+                        <a href="#" aria-label="Facebook">👍</a>
+                        <a href="#" aria-label="Twitter">🐦</a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 Bay Area Family Eats. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="/js/restaurant-data.js"></script>
+    <script src="/js/search.js"></script>
+    <script src="/js/main.js"></script>
+
+    <script>
+        let currentView = 'grid';
+        let displayedCount = 6;
+        let allFilteredRestaurants = [];
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            applyURLFilters();
+            updateActiveFiltersDisplay();
+        });
+
+        // Override applyFilters to update count and active filters
+        const originalApplyFilters = applyFilters;
+        applyFilters = function() {
+            originalApplyFilters();
+
+            // Get filtered restaurants
+            const filtered = filterRestaurants(restaurantsData, currentFilters);
+            const sorted = sortRestaurants(filtered, document.getElementById('filter-sort')?.value || 'featured');
+
+            allFilteredRestaurants = sorted;
+            displayedCount = 6;
+
+            // Update results count
+            const count = filtered.length;
+            document.getElementById('resultsCount').textContent =
+                count === 1 ? '1 Restaurant Found' : `${count} Restaurants Found`;
+
+            // Render initial results
+            renderResults();
+            updateActiveFiltersDisplay();
+
+            // Show/hide load more button
+            document.getElementById('loadMoreContainer').style.display =
+                displayedCount < allFilteredRestaurants.length ? 'block' : 'none';
+        };
+
+        // Render results
+        function renderResults() {
+            const gridElement = document.getElementById('restaurantGrid');
+            const toDisplay = allFilteredRestaurants.slice(0, displayedCount);
+            renderRestaurants(toDisplay, gridElement);
+        }
+
+        // Load more restaurants
+        function loadMore() {
+            displayedCount += 6;
+            renderResults();
+
+            // Hide button if all shown
+            if (displayedCount >= allFilteredRestaurants.length) {
+                document.getElementById('loadMoreContainer').style.display = 'none';
+            }
+        }
+
+        // Handle sort
+        function handleSort() {
+            const sortBy = document.getElementById('filter-sort').value;
+            allFilteredRestaurants = sortRestaurants(allFilteredRestaurants, sortBy);
+            displayedCount = 6;
+            renderResults();
+
+            // Show/hide load more button
+            document.getElementById('loadMoreContainer').style.display =
+                displayedCount < allFilteredRestaurants.length ? 'block' : 'none';
+        }
+
+        // Toggle view
+        function toggleView(view) {
+            currentView = view;
+            const gridElement = document.getElementById('restaurantGrid');
+
+            if (view === 'list') {
+                gridElement.style.gridTemplateColumns = '1fr';
+                document.getElementById('gridViewBtn').className = 'btn btn-sm btn-outline';
+                document.getElementById('listViewBtn').className = 'btn btn-sm btn-secondary';
+            } else {
+                gridElement.style.gridTemplateColumns = '';
+                document.getElementById('gridViewBtn').className = 'btn btn-sm btn-secondary';
+                document.getElementById('listViewBtn').className = 'btn btn-sm btn-outline';
+            }
+        }
+
+        // Update active filters display
+        function updateActiveFiltersDisplay() {
+            const container = document.getElementById('activeFilters');
+            const filters = [];
+
+            if (currentFilters.location) filters.push({ label: 'Location', value: currentFilters.location, key: 'location' });
+            if (currentFilters.cuisine) filters.push({ label: 'Cuisine', value: currentFilters.cuisine, key: 'cuisine' });
+            if (currentFilters.features) {
+                const featureLabels = {
+                    'highchairs': 'High Chairs',
+                    'kids-menu': 'Kids Menu',
+                    'play-area': 'Play Area',
+                    'changing-table': 'Changing Table',
+                    'outdoor': 'Outdoor Seating'
+                };
+                filters.push({ label: 'Feature', value: featureLabels[currentFilters.features], key: 'features' });
+            }
+            if (currentFilters.ageRange) {
+                const ageLabels = {
+                    'toddler': 'Toddlers (0-3)',
+                    'young': 'Young Kids (4-8)',
+                    'tweens': 'Tweens (9-12)',
+                    'teens': 'Teens (13+)'
+                };
+                filters.push({ label: 'Age Range', value: ageLabels[currentFilters.ageRange], key: 'ageRange' });
+            }
+            if (currentFilters.searchTerm) filters.push({ label: 'Search', value: currentFilters.searchTerm, key: 'searchTerm' });
+
+            if (filters.length === 0) {
+                container.innerHTML = '';
+                return;
+            }
+
+            container.innerHTML = filters.map(filter => `
+                <div class="tag active" style="display: flex; align-items: center; gap: var(--spacing-xs);">
+                    <span>${filter.label}: ${filter.value}</span>
+                    <button onclick="removeFilter('${filter.key}')" style="background: none; border: none; color: white; cursor: pointer; padding: 0; margin-left: 4px;">✕</button>
+                </div>
+            `).join('');
+        }
+
+        // Remove individual filter
+        function removeFilter(key) {
+            currentFilters[key] = '';
+
+            // Clear corresponding select
+            const elementMap = {
+                'location': 'filter-location',
+                'cuisine': 'filter-cuisine',
+                'features': 'filter-features',
+                'ageRange': 'filter-age'
+            };
+
+            if (elementMap[key]) {
+                const element = document.getElementById(elementMap[key]);
+                if (element) element.value = '';
+            }
+
+            if (key === 'searchTerm') {
+                const searchInput = document.getElementById('search-input');
+                if (searchInput) searchInput.value = '';
+            }
+
+            applyFilters();
+        }
+
+        // Debounced search
+        let searchTimeout;
+        function debounceSearch() {
+            clearTimeout(searchTimeout);
+            searchTimeout = setTimeout(() => {
+                performSearchOnPage();
+            }, 500);
+        }
+    </script>
+</body>
+</html>

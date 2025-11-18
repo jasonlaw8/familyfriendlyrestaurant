@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Discover the best family-friendly restaurants in the Bay Area. Find restaurants with kids menus, high chairs, play areas, and more.">
+    <meta name="keywords" content="family restaurants, kid-friendly dining, Bay Area restaurants, family dining">
+
+    <!-- Open Graph Meta Tags for Social Sharing -->
+    <meta property="og:title" content="Bay Area Family Eats - Best Family-Friendly Restaurants">
+    <meta property="og:description" content="Discover the best family-friendly restaurants in the Bay Area">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="/images/og-image.jpg">
+
+    <title>Bay Area Family Eats - Best Family-Friendly Restaurants</title>
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" href="/css/components.css">
+    <link rel="stylesheet" href="/css/responsive.css">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-content">
+                <a href="/" class="logo">
+                    <span class="logo-icon">🍽️</span>
+                    <span class="logo-text">Bay Area Family Eats</span>
+                </a>
+                <div class="nav-links">
+                    <a href="/">Home</a>
+                    <a href="/guides/">Guides</a>
+                    <a href="#about">About</a>
+                    <a href="#newsletter">Newsletter</a>
+                </div>
+                <button class="mobile-menu-toggle" aria-label="Toggle menu">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-overlay"></div>
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="hero-title">Discover Bay Area's Best Family-Friendly Restaurants</h1>
+                <p class="hero-subtitle">From high chairs to play areas, find the perfect spot for your family's next meal</p>
+
+                <!-- Hero Search Bar -->
+                <div class="hero-search">
+                    <div class="search-input-group">
+                        <span class="search-icon">📍</span>
+                        <input type="text" id="hero-location" placeholder="Enter city or neighborhood" class="search-input">
+                    </div>
+                    <div class="search-input-group">
+                        <span class="search-icon">🔍</span>
+                        <select id="hero-occasion" class="search-select">
+                            <option value="">Select occasion</option>
+                            <option value="birthday">Birthday Party</option>
+                            <option value="casual">Casual Dining</option>
+                            <option value="brunch">Family Brunch</option>
+                            <option value="outdoor">Outdoor Seating</option>
+                            <option value="quick">Quick Bite</option>
+                        </select>
+                    </div>
+                    <button class="btn btn-primary search-btn" onclick="performSearch()">Find Restaurants</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sticky Filter Bar -->
+    <div class="filter-bar" id="filterBar">
+        <div class="container">
+            <div class="filter-content">
+                <div class="filter-group">
+                    <label>Location</label>
+                    <select id="filter-location" onchange="applyFilters()">
+                        <option value="">All Areas</option>
+                        <option value="san-francisco">San Francisco</option>
+                        <option value="oakland">Oakland</option>
+                        <option value="berkeley">Berkeley</option>
+                        <option value="palo-alto">Palo Alto</option>
+                        <option value="san-jose">San Jose</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label>Cuisine</label>
+                    <select id="filter-cuisine" onchange="applyFilters()">
+                        <option value="">All Cuisines</option>
+                        <option value="american">American</option>
+                        <option value="italian">Italian</option>
+                        <option value="mexican">Mexican</option>
+                        <option value="asian">Asian</option>
+                        <option value="pizza">Pizza</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label>Features</label>
+                    <select id="filter-features" onchange="applyFilters()">
+                        <option value="">All Features</option>
+                        <option value="highchairs">High Chairs</option>
+                        <option value="kids-menu">Kids Menu</option>
+                        <option value="play-area">Play Area</option>
+                        <option value="changing-table">Changing Table</option>
+                        <option value="outdoor">Outdoor Seating</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label>Age Range</label>
+                    <select id="filter-age" onchange="applyFilters()">
+                        <option value="">All Ages</option>
+                        <option value="toddler">Toddlers (0-3)</option>
+                        <option value="young">Young Kids (4-8)</option>
+                        <option value="tweens">Tweens (9-12)</option>
+                        <option value="teens">Teens (13+)</option>
+                    </select>
+                </div>
+                <button class="btn btn-secondary btn-sm" onclick="clearFilters()">Clear All</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Featured Restaurants -->
+    <section class="featured-section">
+        <div class="container">
+            <div class="section-header">
+                <h2>Featured Family Favorites</h2>
+                <p>Hand-picked restaurants that go above and beyond for families</p>
+            </div>
+
+            <div class="restaurant-grid" id="featuredGrid">
+                <!-- Restaurant cards will be dynamically inserted here -->
+            </div>
+
+            <div class="text-center">
+                <a href="/search.html" class="btn btn-outline">View All Restaurants</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Curated Guides -->
+    <section class="guides-section">
+        <div class="container">
+            <div class="section-header">
+                <h2>Curated Guides</h2>
+                <p>Expert recommendations for every occasion</p>
+            </div>
+
+            <div class="guides-grid">
+                <a href="/guides/birthday-parties.html" class="guide-card">
+                    <div class="guide-image" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                        <span class="guide-icon">🎂</span>
+                    </div>
+                    <div class="guide-content">
+                        <h3>Best for Birthday Parties</h3>
+                        <p>Restaurants that make celebrations special</p>
+                        <span class="guide-count">12 restaurants</span>
+                    </div>
+                </a>
+
+                <a href="/guides/play-areas.html" class="guide-card">
+                    <div class="guide-image" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
+                        <span class="guide-icon">🎮</span>
+                    </div>
+                    <div class="guide-content">
+                        <h3>Restaurants with Play Areas</h3>
+                        <p>Let kids burn energy while you relax</p>
+                        <span class="guide-count">8 restaurants</span>
+                    </div>
+                </a>
+
+                <a href="/guides/outdoor-dining.html" class="guide-card">
+                    <div class="guide-image" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">
+                        <span class="guide-icon">🌳</span>
+                    </div>
+                    <div class="guide-content">
+                        <h3>Beautiful Outdoor Spaces</h3>
+                        <p>Fresh air and family-friendly patios</p>
+                        <span class="guide-count">15 restaurants</span>
+                    </div>
+                </a>
+
+                <a href="/guides/quick-bites.html" class="guide-card">
+                    <div class="guide-image" style="background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);">
+                        <span class="guide-icon">⚡</span>
+                    </div>
+                    <div class="guide-content">
+                        <h3>Quick Family Meals</h3>
+                        <p>Fast service, no compromise on quality</p>
+                        <span class="guide-count">10 restaurants</span>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Recent Reviews -->
+    <section class="reviews-section">
+        <div class="container">
+            <div class="section-header">
+                <h2>Recent Reviews</h2>
+                <p>See what families are saying</p>
+            </div>
+
+            <div class="reviews-grid" id="reviewsGrid">
+                <!-- Reviews will be dynamically inserted here -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Newsletter Signup -->
+    <section class="newsletter-section" id="newsletter">
+        <div class="container">
+            <div class="newsletter-content">
+                <h2>Get Weekly Family Dining Recommendations</h2>
+                <p>Join 5,000+ Bay Area families discovering the best kid-friendly spots</p>
+
+                <form class="newsletter-form" onsubmit="submitNewsletter(event)">
+                    <input type="email" placeholder="Enter your email" required class="newsletter-input">
+                    <button type="submit" class="btn btn-primary">Subscribe</button>
+                </form>
+
+                <p class="newsletter-privacy">We respect your privacy. Unsubscribe anytime.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>Bay Area Family Eats</h4>
+                    <p>Helping families find the perfect dining experience since 2024</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Explore</h4>
+                    <ul>
+                        <li><a href="/search.html">All Restaurants</a></li>
+                        <li><a href="/guides/">Curated Guides</a></li>
+                        <li><a href="#about">About Us</a></li>
+                        <li><a href="#contact">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>For Restaurants</h4>
+                    <ul>
+                        <li><a href="#featured">Featured Listings</a></li>
+                        <li><a href="#add">Add Your Restaurant</a></li>
+                        <li><a href="#partner">Partner With Us</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Follow Us</h4>
+                    <div class="social-links">
+                        <a href="#" aria-label="Instagram">📷</a>
+                        <a href="#" aria-label="Facebook">👍</a>
+                        <a href="#" aria-label="Twitter">🐦</a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 Bay Area Family Eats. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="/js/restaurant-data.js"></script>
+    <script src="/js/search.js"></script>
+    <script src="/js/main.js"></script>
+</body>
+</html>

@@ -156,6 +156,9 @@
                         </div>
                     </div>
 
+                    <!-- Category Ratings -->
+                    <div id="categoryRatingsSection"></div>
+
                     <!-- Editorial Review -->
                     <div style="margin-bottom: var(--spacing-xl);">
                         <h2>Our Review</h2>
@@ -380,6 +383,16 @@
     <script>
         // Load similar restaurants
         document.addEventListener('DOMContentLoaded', function() {
+            // Get restaurant data (ID 1 = The Little Dipper Diner)
+            const restaurant = restaurantsData.find(r => r.id === 1);
+
+            // Load category ratings
+            const categoryRatingsSection = document.getElementById('categoryRatingsSection');
+            if (restaurant && restaurant.categoryRatings) {
+                categoryRatingsSection.innerHTML = createCategoryRatingsHTML(restaurant.categoryRatings);
+            }
+
+            // Load similar restaurants
             const similarGrid = document.getElementById('similarRestaurants');
             const similar = restaurantsData.filter(r => r.id !== 1).slice(0, 3);
             renderRestaurants(similar, similarGrid);

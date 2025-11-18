@@ -241,6 +241,8 @@ function createRestaurantCard(restaurant) {
 
                 <p class="card-description">${restaurant.description}</p>
 
+                ${restaurant.categoryRatings ? createCompactCategoryRatingsHTML(restaurant.categoryRatings, 2) : ''}
+
                 <div class="card-footer">
                     <span class="price-range">${restaurant.priceRange}</span>
                     <span class="card-cta">View Details</span>

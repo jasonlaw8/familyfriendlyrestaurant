@@ -43,7 +43,17 @@ const restaurantsData = [
         phone: "(415) 555-0123",
         website: "https://littledipperdiner.com",
         reservationLink: "https://www.opentable.com/little-dipper-diner",
-        coordinates: { lat: 37.7599, lng: -122.4148 }
+        coordinates: { lat: 37.7599, lng: -122.4148 },
+        categoryRatings: {
+            kidsMenu: 4.8,           // Quality & variety of kids menu
+            staff: 4.9,              // Staff patience & friendliness
+            cleanliness: 4.7,        // Cleanliness including bathrooms/changing tables
+            noiseTolerance: 4.8,     // How accommodating they are to noise
+            entertainment: 4.9,      // Play areas, activities, entertainment
+            valueForMoney: 4.6,      // Price vs quality for families
+            waitTime: 4.4,           // How quickly food arrives
+            spaciousness: 4.7        // Table spacing, room for strollers/high chairs
+        }
     },
     {
         id: 2,
@@ -85,7 +95,17 @@ const restaurantsData = [
         phone: "(510) 555-0456",
         website: "https://pastapalace.com",
         reservationLink: "https://www.opentable.com/pasta-palace",
-        coordinates: { lat: 37.8444, lng: -122.2512 }
+        coordinates: { lat: 37.8444, lng: -122.2512 },
+        categoryRatings: {
+            kidsMenu: 4.7,
+            staff: 4.8,
+            cleanliness: 4.9,
+            noiseTolerance: 4.2,     // Quieter atmosphere
+            entertainment: 3.8,      // Limited entertainment
+            valueForMoney: 4.3,
+            waitTime: 4.1,
+            spaciousness: 4.6
+        }
     },
     {
         id: 3,
@@ -127,7 +147,17 @@ const restaurantsData = [
         phone: "(510) 555-0789",
         website: "https://tacofiesta.com",
         reservationLink: null,
-        coordinates: { lat: 37.8688, lng: -122.2677 }
+        coordinates: { lat: 37.8688, lng: -122.2677 },
+        categoryRatings: {
+            kidsMenu: 4.6,
+            staff: 4.9,
+            cleanliness: 4.5,
+            noiseTolerance: 4.9,     // Lively, noise-friendly atmosphere
+            entertainment: 4.4,
+            valueForMoney: 4.8,      // Great value
+            waitTime: 4.6,
+            spaciousness: 4.7
+        }
     },
     {
         id: 4,
@@ -169,7 +199,17 @@ const restaurantsData = [
         phone: "(650) 555-0234",
         website: "https://sunnysidecafe.com",
         reservationLink: "https://www.opentable.com/sunny-side-cafe",
-        coordinates: { lat: 37.4467, lng: -122.1598 }
+        coordinates: { lat: 37.4467, lng: -122.1598 },
+        categoryRatings: {
+            kidsMenu: 4.9,           // Excellent healthy options
+            staff: 5.0,              // Exceptionally patient
+            cleanliness: 4.8,
+            noiseTolerance: 4.9,
+            entertainment: 5.0,      // Outdoor garden with sandbox
+            valueForMoney: 4.8,      // Kids eat free Sundays
+            waitTime: 4.7,
+            spaciousness: 4.9
+        }
     },
     {
         id: 5,
@@ -210,7 +250,17 @@ const restaurantsData = [
         phone: "(408) 555-0567",
         website: "https://dragonbowl.com",
         reservationLink: "https://www.opentable.com/dragon-bowl",
-        coordinates: { lat: 37.3230, lng: -121.9483 }
+        coordinates: { lat: 37.3230, lng: -121.9483 },
+        categoryRatings: {
+            kidsMenu: 4.6,           // Customizable bowls
+            staff: 4.7,
+            cleanliness: 4.8,
+            noiseTolerance: 4.0,     // Quieter environment
+            entertainment: 3.5,      // Minimal entertainment
+            valueForMoney: 4.4,
+            waitTime: 4.8,           // Fast service
+            spaciousness: 4.3
+        }
     },
     {
         id: 6,
@@ -251,7 +301,17 @@ const restaurantsData = [
         phone: "(415) 555-0890",
         website: "https://pizzaparadise.com",
         reservationLink: null,
-        coordinates: { lat: 37.7989, lng: -122.4075 }
+        coordinates: { lat: 37.7989, lng: -122.4075 },
+        categoryRatings: {
+            kidsMenu: 4.5,           // Pizza & simple options
+            staff: 4.6,
+            cleanliness: 4.4,
+            noiseTolerance: 4.9,     // Very noise-friendly
+            entertainment: 4.8,      // Game room with arcade
+            valueForMoney: 4.7,
+            waitTime: 4.5,
+            spaciousness: 4.4
+        }
     }
 ];
 
@@ -266,7 +326,17 @@ const reviewsData = [
         rating: 5,
         date: "2024-11-10",
         text: "This place is a lifesaver! The play area kept my 3-year-old entertained while we enjoyed a peaceful meal. The staff brought crayons and coloring books without us even asking.",
-        highlight: "The outdoor patio has misters for hot days and the kids menu is actually healthy - not just chicken nuggets!"
+        highlight: "The outdoor patio has misters for hot days and the kids menu is actually healthy - not just chicken nuggets!",
+        categoryRatings: {
+            kidsMenu: 5,
+            staff: 5,
+            cleanliness: 5,
+            noiseTolerance: 5,
+            entertainment: 5,
+            valueForMoney: 4,
+            waitTime: 4,
+            spaciousness: 5
+        }
     },
     {
         id: 2,
@@ -277,7 +347,17 @@ const reviewsData = [
         rating: 5,
         date: "2024-11-12",
         text: "Best brunch spot for families, hands down. The garden area is amazing - my kids played in the sandbox while we relaxed. Kids eat free on Sundays is a huge bonus!",
-        highlight: "They have a diaper changing station in both restrooms and the staff is incredibly patient."
+        highlight: "They have a diaper changing station in both restrooms and the staff is incredibly patient.",
+        categoryRatings: {
+            kidsMenu: 5,
+            staff: 5,
+            cleanliness: 5,
+            noiseTolerance: 5,
+            entertainment: 5,
+            valueForMoney: 5,
+            waitTime: 5,
+            spaciousness: 5
+        }
     },
     {
         id: 3,
@@ -288,7 +368,17 @@ const reviewsData = [
         rating: 5,
         date: "2024-11-14",
         text: "We celebrated our daughter's 8th birthday here and it was perfect. The staff sang happy birthday, brought out a special dessert, and the kids loved the festive atmosphere.",
-        highlight: "Great for families who don't mind a little noise - the lively atmosphere means your kids won't be the loudest ones there!"
+        highlight: "Great for families who don't mind a little noise - the lively atmosphere means your kids won't be the loudest ones there!",
+        categoryRatings: {
+            kidsMenu: 5,
+            staff: 5,
+            cleanliness: 4,
+            noiseTolerance: 5,
+            entertainment: 4,
+            valueForMoney: 5,
+            waitTime: 5,
+            spaciousness: 5
+        }
     }
 ];
 
@@ -310,4 +400,38 @@ const featureLabels = {
     playArea: 'Play Area',
     outdoorSeating: 'Outdoor Seating',
     patientStaff: 'Patient Staff'
+};
+
+// Category rating labels and icons
+const categoryRatingLabels = {
+    kidsMenu: 'Kid-Friendly Menu',
+    staff: 'Staff Patience',
+    cleanliness: 'Cleanliness',
+    noiseTolerance: 'Noise Tolerance',
+    entertainment: 'Entertainment',
+    valueForMoney: 'Value for Money',
+    waitTime: 'Wait Time',
+    spaciousness: 'Spaciousness'
+};
+
+const categoryRatingIcons = {
+    kidsMenu: '🍽️',
+    staff: '😊',
+    cleanliness: '✨',
+    noiseTolerance: '🔊',
+    entertainment: '🎮',
+    valueForMoney: '💰',
+    waitTime: '⏱️',
+    spaciousness: '📏'
+};
+
+const categoryRatingDescriptions = {
+    kidsMenu: 'Quality and variety of children\'s menu options',
+    staff: 'How patient and accommodating staff are with families',
+    cleanliness: 'Overall cleanliness including bathrooms and changing facilities',
+    noiseTolerance: 'How welcoming they are to normal kid noise',
+    entertainment: 'Play areas, activities, and entertainment for kids',
+    valueForMoney: 'Price vs. quality for family dining',
+    waitTime: 'How quickly food arrives at your table',
+    spaciousness: 'Room for strollers, high chairs, and moving around'
 };

@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Write a Review - Bay Area Family Eats</title>
+    <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" href="/css/components.css">
+    <link rel="stylesheet" href="/css/responsive.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-content">
+                <a href="/" class="logo">
+                    <span class="logo-icon">🍽️</span>
+                    <span class="logo-text">Bay Area Family Eats</span>
+                </a>
+                <div class="nav-links">
+                    <a href="/">Home</a>
+                    <a href="/guides/">Guides</a>
+                    <a href="#about">About</a>
+                    <a href="#newsletter">Newsletter</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Review Form -->
+    <section style="padding: var(--spacing-xxl) 0; background: var(--bg-light);">
+        <div class="container">
+            <div style="max-width: 700px; margin: 0 auto;">
+                <a href="javascript:history.back()" style="color: var(--text-secondary); font-size: 0.875rem; margin-bottom: var(--spacing-sm); display: inline-block;">
+                    ← Back
+                </a>
+
+                <h1 style="margin-bottom: var(--spacing-sm);">Write a Review</h1>
+                <p style="color: var(--text-secondary); margin-bottom: var(--spacing-xl);">
+                    Help other families by sharing your experience! Rate this restaurant on key family-friendly categories.
+                </p>
+
+                <form id="reviewForm" style="background: white; padding: var(--spacing-xl); border-radius: var(--radius-lg); box-shadow: var(--shadow-sm);">
+                    <!-- Restaurant Selection -->
+                    <div style="margin-bottom: var(--spacing-lg);">
+                        <label style="display: block; font-weight: 600; margin-bottom: var(--spacing-xs);">Restaurant</label>
+                        <select id="restaurantSelect" required style="width: 100%; padding: var(--spacing-sm); border: 2px solid var(--border-color); border-radius: var(--radius-md); font-size: 1rem;">
+                            <option value="">Select a restaurant</option>
+                        </select>
+                    </div>
+
+                    <!-- Overall Rating -->
+                    <div style="margin-bottom: var(--spacing-lg);">
+                        <label style="display: block; font-weight: 600; margin-bottom: var(--spacing-xs);">Overall Rating</label>
+                        <div id="overallRating" style="display: flex; gap: var(--spacing-xs); font-size: 2rem; cursor: pointer;">
+                            <span data-rating="1">☆</span>
+                            <span data-rating="2">☆</span>
+                            <span data-rating="3">☆</span>
+                            <span data-rating="4">☆</span>
+                            <span data-rating="5">☆</span>
+                        </div>
+                        <input type="hidden" id="overallRatingValue" required>
+                    </div>
+
+                    <!-- Category Ratings -->
+                    <div style="margin-bottom: var(--spacing-lg);">
+                        <h3 style="margin-bottom: var(--spacing-md);">Category Ratings</h3>
+                        <p style="font-size: 0.875rem; color: var(--text-secondary); margin-bottom: var(--spacing-md);">
+                            Rate each category from 1 (poor) to 5 (excellent)
+                        </p>
+
+                        <div id="categoryRatingsForm" style="display: grid; gap: var(--spacing-md);">
+                            <!-- Category ratings will be dynamically inserted here -->
+                        </div>
+                    </div>
+
+                    <!-- Review Text -->
+                    <div style="margin-bottom: var(--spacing-lg);">
+                        <label style="display: block; font-weight: 600; margin-bottom: var(--spacing-xs);">Your Review</label>
+                        <textarea id="reviewText" required rows="5" placeholder="Share your experience... What made this restaurant family-friendly? What did your kids love?" style="width: 100%; padding: var(--spacing-sm); border: 2px solid var(--border-color); border-radius: var(--radius-md); font-size: 1rem; font-family: var(--font-body); resize: vertical;"></textarea>
+                    </div>
+
+                    <!-- Pro Tip (Optional) -->
+                    <div style="margin-bottom: var(--spacing-lg);">
+                        <label style="display: block; font-weight: 600; margin-bottom: var(--spacing-xs);">Pro Tip (Optional)</label>
+                        <input type="text" id="proTip" placeholder="e.g., Ask for a table near the play area" style="width: 100%; padding: var(--spacing-sm); border: 2px solid var(--border-color); border-radius: var(--radius-md); font-size: 1rem;">
+                        <p style="font-size: 0.75rem; color: var(--text-light); margin-top: 4px;">Share a helpful tip for other families</p>
+                    </div>
+
+                    <!-- Your Information -->
+                    <div style="margin-bottom: var(--spacing-lg);">
+                        <h3 style="margin-bottom: var(--spacing-md);">Your Information</h3>
+
+                        <div style="margin-bottom: var(--spacing-md);">
+                            <label style="display: block; font-weight: 600; margin-bottom: var(--spacing-xs);">Name</label>
+                            <input type="text" id="userName" required placeholder="e.g., Sarah M." style="width: 100%; padding: var(--spacing-sm); border: 2px solid var(--border-color); border-radius: var(--radius-md); font-size: 1rem;">
+                        </div>
+
+                        <div style="margin-bottom: var(--spacing-md);">
+                            <label style="display: block; font-weight: 600; margin-bottom: var(--spacing-xs);">Email (won't be published)</label>
+                            <input type="email" id="userEmail" required placeholder="your@email.com" style="width: 100%; padding: var(--spacing-sm); border: 2px solid var(--border-color); border-radius: var(--spacing-md); font-size: 1rem;">
+                        </div>
+                    </div>
+
+                    <!-- Submit -->
+                    <div>
+                        <button type="submit" class="btn btn-primary" style="width: 100%; padding: var(--spacing-md); font-size: 1.125rem;">
+                            Submit Review
+                        </button>
+                        <p style="font-size: 0.75rem; color: var(--text-light); margin-top: var(--spacing-sm); text-align: center;">
+                            By submitting, you agree to our Terms of Service and Privacy Policy
+                        </p>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <script src="/js/restaurant-data.js"></script>
+    <script src="/js/main.js"></script>
+
+    <script>
+        // Populate restaurant dropdown
+        document.addEventListener('DOMContentLoaded', function() {
+            const restaurantSelect = document.getElementById('restaurantSelect');
+            restaurantsData.forEach(restaurant => {
+                const option = document.createElement('option');
+                option.value = restaurant.id;
+                option.textContent = restaurant.name;
+                restaurantSelect.appendChild(option);
+            });
+
+            // Create category rating inputs
+            const categoryRatingsForm = document.getElementById('categoryRatingsForm');
+            Object.keys(categoryRatingLabels).forEach(key => {
+                const label = categoryRatingLabels[key];
+                const icon = categoryRatingIcons[key];
+                const description = categoryRatingDescriptions[key];
+
+                const ratingHTML = `
+                    <div style="border-bottom: 1px solid var(--bg-gray); padding-bottom: var(--spacing-md);">
+                        <div style="display: flex; align-items: center; gap: var(--spacing-sm); margin-bottom: var(--spacing-xs);">
+                            <span style="font-size: 1.5rem;">${icon}</span>
+                            <label style="font-weight: 600; flex: 1;">${label}</label>
+                        </div>
+                        <p style="font-size: 0.75rem; color: var(--text-light); margin-bottom: var(--spacing-xs);">${description}</p>
+                        <div class="star-rating-input" data-category="${key}" style="display: flex; gap: 4px; font-size: 1.5rem; cursor: pointer;">
+                            <span data-rating="1">☆</span>
+                            <span data-rating="2">☆</span>
+                            <span data-rating="3">☆</span>
+                            <span data-rating="4">☆</span>
+                            <span data-rating="5">☆</span>
+                        </div>
+                        <input type="hidden" name="category_${key}" id="category_${key}" required>
+                    </div>
+                `;
+                categoryRatingsForm.innerHTML += ratingHTML;
+            });
+
+            // Setup star rating interactions
+            setupStarRatings();
+        });
+
+        function setupStarRatings() {
+            // Overall rating
+            const overallStars = document.querySelectorAll('#overallRating span');
+            overallStars.forEach(star => {
+                star.addEventListener('click', function() {
+                    const rating = this.dataset.rating;
+                    document.getElementById('overallRatingValue').value = rating;
+                    updateStars(overallStars, rating);
+                });
+            });
+
+            // Category ratings
+            const categoryRatingInputs = document.querySelectorAll('.star-rating-input');
+            categoryRatingInputs.forEach(container => {
+                const stars = container.querySelectorAll('span');
+                const category = container.dataset.category;
+
+                stars.forEach(star => {
+                    star.addEventListener('click', function() {
+                        const rating = this.dataset.rating;
+                        document.getElementById(`category_${category}`).value = rating;
+                        updateStars(stars, rating);
+                    });
+                });
+            });
+        }
+
+        function updateStars(stars, rating) {
+            stars.forEach(star => {
+                if (parseInt(star.dataset.rating) <= parseInt(rating)) {
+                    star.textContent = '★';
+                    star.style.color = 'var(--secondary-color)';
+                } else {
+                    star.textContent = '☆';
+                    star.style.color = 'var(--text-light)';
+                }
+            });
+        }
+
+        // Handle form submission
+        document.getElementById('reviewForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            // Collect form data
+            const formData = {
+                restaurantId: document.getElementById('restaurantSelect').value,
+                overallRating: document.getElementById('overallRatingValue').value,
+                categoryRatings: {},
+                reviewText: document.getElementById('reviewText').value,
+                proTip: document.getElementById('proTip').value,
+                userName: document.getElementById('userName').value,
+                userEmail: document.getElementById('userEmail').value
+            };
+
+            // Collect category ratings
+            Object.keys(categoryRatingLabels).forEach(key => {
+                formData.categoryRatings[key] = parseInt(document.getElementById(`category_${key}`).value);
+            });
+
+            // In production, this would submit to an API
+            console.log('Review submitted:', formData);
+
+            // Show success message
+            alert('Thank you for your review! It will be published after moderation.');
+
+            // Reset form
+            this.reset();
+            document.querySelectorAll('[data-rating]').forEach(star => {
+                star.textContent = '☆';
+                star.style.color = '';
+            });
+        });
+    </script>
+</body>
+</html>

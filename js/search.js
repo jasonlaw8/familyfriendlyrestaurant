@@ -292,3 +292,123 @@ function sortRestaurants(restaurants, sortBy) {
 
     return sorted;
 }
+
+// Handle sort change
+function handleSort() {
+    const sortBy = document.getElementById('filter-sort')?.value || 'featured';
+    const filteredRestaurants = filterRestaurants(restaurantsData, currentFilters);
+    const sortedRestaurants = sortRestaurants(filteredRestaurants, sortBy);
+
+    const gridElement = document.getElementById('restaurantGrid');
+    if (gridElement) {
+        renderRestaurants(sortedRestaurants, gridElement);
+        updateResultsCount(sortedRestaurants.length);
+    }
+}
+
+// Debounced search function
+const debounceSearch = (function() {
+    let timeout;
+    return function() {
+        clearTimeout(timeout);
+        timeout = setTimeout(() => {
+            performSearchOnPage();
+        }, 300);
+    };
+})();
+
+// Update results count display
+function updateResultsCount(count) {
+    const resultsCount = document.getElementById('resultsCount');
+    if (resultsCount) {
+        resultsCount.textContent = `${count} ${count === 1 ? 'restaurant' : 'restaurants'} found`;
+    }
+}
+
+// Toggle view between grid and list
+let currentView = 'grid';
+function toggleView(view) {
+    currentView = view;
+    const grid = document.getElementById('restaurantGrid');
+    const gridBtn = document.getElementById('gridViewBtn');
+    const listBtn = document.getElementById('listViewBtn');
+
+    if (grid) {
+        if (view === 'list') {
+            grid.classList.add('restaurant-list');
+            grid.classList.remove('restaurant-grid');
+            listBtn?.classList.replace('btn-secondary', 'btn-outline');
+            gridBtn?.classList.replace('btn-outline', 'btn-secondary');
+        } else {
+            grid.classList.add('restaurant-grid');
+            grid.classList.remove('restaurant-list');
+            gridBtn?.classList.replace('btn-secondary', 'btn-outline');
+            listBtn?.classList.replace('btn-outline', 'btn-secondary');
+        }
+    }
+}
+
+// Load more restaurants (pagination)
+let displayedCount = 12;
+function loadMore() {
+    const filteredRestaurants = filterRestaurants(restaurantsData, currentFilters);
+    const sortBy = document.getElementById('filter-sort')?.value || 'featured';
+    const sortedRestaurants = sortRestaurants(filteredRestaurants, sortBy);
+
+    displayedCount += 12;
+    const toDisplay = sortedRestaurants.slice(0, displayedCount);
+
+    const gridElement = document.getElementById('restaurantGrid');
+    if (gridElement) {
+        renderRestaurants(toDisplay, gridElement);
+    }
+
+    // Hide load more button if all restaurants are displayed
+    if (displayedCount >= sortedRestaurants.length) {
+        const loadMoreContainer = document.getElementById('loadMoreContainer');
+        if (loadMoreContainer) {
+            loadMoreContainer.style.display = 'none';
+        }
+    }
+}
+
+// Initialize search page
+function initializeSearchPage() {
+    const gridElement = document.getElementById('restaurantGrid');
+
+    // Show loading state
+    if (gridElement && typeof showLoadingState === 'function') {
+        showLoadingState(gridElement);
+    }
+
+    // Simulate async load (in production this would be a real API call)
+    setTimeout(() => {
+        // Load URL filters if present
+        applyURLFilters();
+
+        // Get filtered and sorted restaurants
+        const filteredRestaurants = filterRestaurants(restaurantsData, currentFilters);
+        const sortBy = document.getElementById('filter-sort')?.value || 'featured';
+        const sortedRestaurants = sortRestaurants(filteredRestaurants, sortBy);
+
+        // Display first batch
+        const toDisplay = sortedRestaurants.slice(0, displayedCount);
+        if (gridElement) {
+            renderRestaurants(toDisplay, gridElement);
+            updateResultsCount(sortedRestaurants.length);
+        }
+
+        // Hide load more if not needed
+        if (sortedRestaurants.length <= displayedCount) {
+            const loadMoreContainer = document.getElementById('loadMoreContainer');
+            if (loadMoreContainer) {
+                loadMoreContainer.style.display = 'none';
+            }
+        }
+    }, 500);
+}
+
+// Initialize on search page load
+if (window.location.pathname.includes('search.html')) {
+    document.addEventListener('DOMContentLoaded', initializeSearchPage);
+}

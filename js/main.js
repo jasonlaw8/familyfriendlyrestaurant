@@ -352,7 +352,111 @@ function debounce(func, wait) {
 window.addEventListener('load', function() {
     lazyLoadImages();
     initializeTooltips();
+    initializeBackToTop();
+    initializeBreadcrumbs();
 });
+
+// Back to Top Button
+function initializeBackToTop() {
+    // Create back to top button
+    const backToTop = document.createElement('button');
+    backToTop.id = 'backToTop';
+    backToTop.innerHTML = '↑';
+    backToTop.setAttribute('aria-label', 'Back to top');
+    backToTop.style.cssText = `
+        position: fixed;
+        bottom: 30px;
+        right: 30px;
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        background: var(--primary-color);
+        color: white;
+        border: none;
+        font-size: 1.5rem;
+        cursor: pointer;
+        box-shadow: var(--shadow-md);
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.3s ease;
+        z-index: 1000;
+    `;
+    document.body.appendChild(backToTop);
+
+    // Show/hide based on scroll
+    window.addEventListener('scroll', function() {
+        if (window.pageYOffset > 300) {
+            backToTop.style.opacity = '1';
+            backToTop.style.visibility = 'visible';
+        } else {
+            backToTop.style.opacity = '0';
+            backToTop.style.visibility = 'hidden';
+        }
+    });
+
+    // Scroll to top on click
+    backToTop.addEventListener('click', function() {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
+    });
+}
+
+// Breadcrumb Navigation
+function initializeBreadcrumbs() {
+    const breadcrumbContainer = document.getElementById('breadcrumbs');
+    if (!breadcrumbContainer) return;
+
+    const path = window.location.pathname;
+    const pathParts = path.split('/').filter(part => part);
+
+    let breadcrumbHTML = '<a href="/">Home</a>';
+    let currentPath = '';
+
+    pathParts.forEach((part, index) => {
+        currentPath += '/' + part;
+        const isLast = index === pathParts.length - 1;
+
+        // Format the part name
+        let name = part.replace('.html', '').replace(/-/g, ' ');
+        name = name.split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+
+        if (isLast) {
+            breadcrumbHTML += \` <span style="color: var(--text-secondary);">›</span> <span>\${name}</span>\`;
+        } else {
+            breadcrumbHTML += \` <span style="color: var(--text-secondary);">›</span> <a href="\${currentPath}">\${name}</a>\`;
+        }
+    });
+
+    breadcrumbContainer.innerHTML = breadcrumbHTML;
+}
+
+// Loading State for Restaurant Grid
+function showLoadingState(gridElement) {
+    if (!gridElement) return;
+
+    const loadingHTML = \`
+        <div class="loading-state" style="grid-column: 1 / -1; text-align: center; padding: var(--spacing-xl);">
+            <div class="loading-spinner" style="margin: 0 auto var(--spacing-md); width: 50px; height: 50px; border: 4px solid var(--border-color); border-top-color: var(--primary-color); border-radius: 50%; animation: spin 1s linear infinite;"></div>
+            <p style="color: var(--text-secondary);">Loading restaurants...</p>
+        </div>
+    \`;
+    gridElement.innerHTML = loadingHTML;
+
+    // Add spinner animation if not exists
+    if (!document.getElementById('spinner-keyframes')) {
+        const style = document.createElement('style');
+        style.id = 'spinner-keyframes';
+        style.textContent = \`
+            @keyframes spin {
+                0% { transform: rotate(0deg); }
+                100% { transform: rotate(360deg); }
+            }
+        \`;
+        document.head.appendChild(style);
+    }
+}
 
 // Category Rating Functions
 // ==========================

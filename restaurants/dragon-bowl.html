@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Dragon Bowl - Modern Asian fusion with a kid-friendly menu. The build-your-own-bowl concept is a hit with picky eaters.">
+    <meta name="keywords" content="family restaurant, Asian, San Jose, kid-friendly">
+    <meta property="og:title" content="Dragon Bowl - Bay Area Family Eats">
+    <meta property="og:description" content="Modern Asian fusion with a kid-friendly menu. The build-your-own-bowl concept is a hit with picky eaters.">
+    <meta property="og:type" content="restaurant">
+    <title>Dragon Bowl - Bay Area Family Eats</title>
+    <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" href="/css/components.css">
+    <link rel="stylesheet" href="/css/responsive.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+    <!-- Schema.org Structured Data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Restaurant",
+      "name": "Dragon Bowl",
+      "servesCuisine": "Asian",
+      "priceRange": "6617",
+      "telephone": "(408) 555-0567",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "789 Santana Row",
+        "addressLocality": "San Jose",
+        "addressRegion": "CA",
+        "postalCode": "95128"
+      },
+      "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": "4.5",
+        "reviewCount": "289",
+        "bestRating": "5",
+        "worstRating": "1"
+      },
+      "url": "https://bayareafamilyeats.com/restaurants/dragon-bowl.html"
+    }
+    </script>
+    <link rel="canonical" href="https://bayareafamilyeats.com/restaurants/dragon-bowl.html">
+
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Restaurant on Bay Area Family Eats">
+    <meta name="twitter:description" content="Family-friendly restaurant in the Bay Area">
+    <meta name="twitter:image" content="https://bayareafamilyeats.com/images/og-image.jpg">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-content">
+                <a href="/" class="logo">
+                    <span class="logo-icon">🍽️</span>
+                    <span class="logo-text">Bay Area Family Eats</span>
+                </a>
+                <div class="nav-links">
+                    <a href="/">Home</a>
+                    <a href="/guides/">Guides</a>
+                    <a href="/about.html">About</a>
+                    <a href="#newsletter">Newsletter</a>
+                </div>
+                <button class="mobile-menu-toggle" aria-label="Toggle menu">
+                    <span></span><span></span><span></span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <section class="restaurant-header" style="padding: var(--spacing-xl) 0; background: var(--bg-light);">
+        <div class="container">
+            <a href="/search.html" style="color: var(--text-secondary); font-size: 0.875rem; margin-bottom: var(--spacing-sm); display: inline-block;">
+                ← Back to all restaurants
+            </a>
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: var(--spacing-md);">
+                <div>
+                    <h1 style="margin: 0 0 var(--spacing-xs) 0;">Dragon Bowl</h1>
+                    <div style="display: flex; align-items: center; gap: var(--spacing-md); margin-bottom: var(--spacing-sm); flex-wrap: wrap;">
+                        <div class="card-rating">
+                            <span class="stars">⭐⭐⭐⭐</span>
+                            <span class="rating-text">4.5</span>
+                            <span class="rating-count">(289 reviews)</span>
+                        </div>
+                        <span class="price-range" style="font-size: 1.125rem;">$$</span>
+                        <span style="color: var(--text-secondary);">Asian</span>
+                    </div>
+                    <div class="card-location" style="margin-bottom: var(--spacing-sm);">
+                        <span>📍</span>
+                        <span>Santana Row, San Jose</span>
+                    </div>
+                </div>
+                <div style="display: flex; gap: var(--spacing-sm); flex-wrap: wrap;">
+                    <button class="btn btn-primary" onclick="window.open('https://www.opentable.com/dragon-bowl', '_blank')">Make Reservation</button>
+                    <button class="btn btn-outline" onclick="handleDirectionsClick('789 Santana Row, San Jose, CA 95128')">Get Directions</button>
+                    <button class="btn btn-secondary" onclick="window.open('tel:(408) 555-0567')">Call</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section style="padding: var(--spacing-xxl) 0;">
+        <div class="container">
+            <div style="display: grid; grid-template-columns: 2fr 1fr; gap: var(--spacing-xl);">
+                <div>
+                    <div style="margin-bottom: var(--spacing-xl);">
+                        <h2>Family-Friendly Features</h2>
+                        <div class="feature-icons">
+                            <div class="feature-item"><span class="feature-item-icon">👶</span><span class="feature-item-label">High Chairs</span></div><div class="feature-item"><span class="feature-item-icon">🍽️</span><span class="feature-item-label">Kids Menu</span></div><div class="feature-item"><span class="feature-item-icon">🚼</span><span class="feature-item-label">Changing Table</span></div><div class="feature-item"><span class="feature-item-icon">😊</span><span class="feature-item-label">Patient Staff</span></div>
+                        </div>
+                    </div>
+
+                    <div style="margin-bottom: var(--spacing-xl);">
+                        <h2>Our Review</h2>
+                        <div style="background: var(--bg-light); padding: var(--spacing-lg); border-radius: var(--radius-lg); border-left: 4px solid var(--primary-color);">
+                            <p>Modern Asian fusion with a kid-friendly menu. The build-your-own-bowl concept is a hit with picky eaters.</p>
+                            <p>Perfect for families looking for a quiet atmosphere. This restaurant is particularly well-suited for young, tweens, teens age groups.</p>
+                        </div>
+                    </div>
+
+                    <div style="margin-bottom: var(--spacing-xl);">
+                        <h2>Details</h2>
+                        <div style="background: white; padding: var(--spacing-lg); border-radius: var(--radius-lg); box-shadow: var(--shadow-sm);">
+                            <div style="display: grid; gap: var(--spacing-md);">
+                                <div><strong>📍 Address:</strong> 789 Santana Row, San Jose, CA 95128</div>
+                                <div><strong>📞 Phone:</strong> <a href="tel:(408) 555-0567">(408) 555-0567</a></div>
+                                <div><strong>🌐 Website:</strong> <a href="https://dragonbowl.com" target="_blank">https://dragonbowl.com</a></div>
+                                <div><strong>💰 Price Range:</strong> $$ per person</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div>
+                    <div class="sidebar-card">
+                        <h3>Quick Info</h3>
+                        <div style="display: flex; flex-direction: column; gap: var(--spacing-sm);">
+                            <div style="padding: var(--spacing-sm); background: var(--bg-light); border-radius: var(--radius-md);">
+                                <strong>Location</strong>
+                                <p style="margin: var(--spacing-xs) 0 0 0;">Santana Row, San Jose</p>
+                            </div>
+                            <div style="padding: var(--spacing-sm); background: var(--bg-light); border-radius: var(--radius-md);">
+                                <strong>Best For</strong>
+                                <p style="margin: var(--spacing-xs) 0 0 0;">Young, Tweens, Teens</p>
+                            </div>
+                            <div style="padding: var(--spacing-sm); background: var(--bg-light); border-radius: var(--radius-md);">
+                                <strong>Atmosphere</strong>
+                                <p style="margin: var(--spacing-xs) 0 0 0;">Quiet</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>Bay Area Family Eats</h4>
+                    <p>Helping families find the perfect dining experience since 2024</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Explore</h4>
+                    <ul>
+                        <li><a href="/search.html">All Restaurants</a></li>
+                        <li><a href="/guides/">Curated Guides</a></li>
+                        <li><a href="/about.html">About Us</a></li>
+                        <li><a href="/contact.html">Contact</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 Bay Area Family Eats. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="/js/main.js"></script>
+</body>
+</html>

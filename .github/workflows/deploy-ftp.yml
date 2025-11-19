@@ -1,0 +1,40 @@
+name: Deploy to FTP
+
+# Trigger deployment on push to main branch
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    name: Deploy to FTP Server
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checkout the repository
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Deploy to FTP
+      - name: FTP Deploy
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.4
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          protocol: ftps  # Use 'ftp' for regular FTP, 'ftps' for FTP with TLS
+          port: 21        # Default FTP port (change if your host uses a different port)
+          local-dir: ./   # Deploy everything from root directory
+          server-dir: /   # Upload to root directory on server (change to /public_html/ if needed)
+
+          # Optional: Exclude files/folders you don't want to upload
+          exclude: |
+            **/.git*
+            **/.git*/**
+            **/node_modules/**
+            **/.DS_Store
+            **/README.md
+            **/.github/**
+            **/start-server.sh
+            **/start-server.bat

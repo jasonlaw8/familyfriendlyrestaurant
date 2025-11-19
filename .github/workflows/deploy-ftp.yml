@@ -23,10 +23,12 @@ jobs:
           server: ${{ secrets.FTP_SERVER }}
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
-          protocol: ftps  # Use 'ftp' for regular FTP, 'ftps' for FTP with TLS
-          port: 21        # Default FTP port (change if your host uses a different port)
+          protocol: ftp   # Try 'ftp' first (change to 'ftps' if your host requires it)
+          port: 21        # Default FTP port
           local-dir: ./   # Deploy everything from root directory
-          server-dir: /   # Upload to root directory on server (change to /public_html/ if needed)
+          server-dir: /public_html/   # Most common directory (try / or /www/ if this doesn't work)
+          dangerous-clean-slate: false  # Keep existing files
+          log-level: verbose  # Show detailed logs for debugging
 
           # Optional: Exclude files/folders you don't want to upload
           exclude: |

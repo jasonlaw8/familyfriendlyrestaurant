@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Find the best family-friendly restaurants in San Jose. Kid-friendly dining spots with play areas, kids menus, high chairs, and patient staff in San Jose neighborhoods.">
+    <meta name="keywords" content="family restaurants San Jose, kid-friendly restaurants San Jose, family dining San Jose, restaurants with play areas San Jose">
+
+    <title>Family-Friendly Restaurants in San Jose | Bay Area Family Eats</title>
+
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:title" content="Family-Friendly Restaurants in San Jose">
+    <meta property="og:description" content="Discover the best kid-friendly restaurants in San Jose with play areas, kids menus, and welcoming staff.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://bayareafamilyeats.com/locations/san-jose.html">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" href="/css/components.css">
+    <link rel="stylesheet" href="/css/responsive.css">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="canonical" href="https://bayareafamilyeats.com/locations/san-jose.html">
+
+    <!-- Schema.org Structured Data -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "ItemList",
+        "name": "Family-Friendly Restaurants in San Jose",
+        "description": "A curated list of the best family-friendly restaurants in San Jose, CA",
+        "url": "https://bayareafamilyeats.com/locations/san-jose.html",
+        "numberOfItems": 4,
+        "itemListElement": []
+    }
+    </script>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-content">
+                <a href="/" class="logo">
+                    <span class="logo-icon">🍽️</span>
+                    <span class="logo-text">Bay Area Family Eats</span>
+                </a>
+                <div class="nav-links">
+                    <a href="/">Home</a>
+                    <a href="/search.html">Restaurants</a>
+                    <a href="/guides/">Guides</a>
+                    <a href="/about.html">About</a>
+                    <a href="/contact.html">Contact</a>
+                </div>
+                <button class="mobile-menu-toggle" aria-label="Toggle menu">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="location-hero" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 4rem 0;">
+        <div class="container">
+            <nav class="breadcrumb" style="margin-bottom: 1rem;">
+                <a href="/" style="color: rgba(255,255,255,0.8);">Home</a>
+                <span style="margin: 0 0.5rem; opacity: 0.6;">›</span>
+                <a href="/locations/" style="color: rgba(255,255,255,0.8);">Locations</a>
+                <span style="margin: 0 0.5rem; opacity: 0.6;">›</span>
+                <span>San Jose</span>
+            </nav>
+            <h1 style="font-size: 2.5rem; margin-bottom: 1rem;">Family-Friendly Restaurants in San Jose</h1>
+            <p style="font-size: 1.25rem; opacity: 0.9; max-width: 700px;">Discover kid-friendly dining spots across San Jose neighborhoods - from upscale Santana Row to charming Willow Glen, bustling Downtown to historic Japantown.</p>
+        </div>
+    </section>
+
+    <!-- Location Info -->
+    <section style="background: var(--bg-light); padding: 2rem 0;">
+        <div class="container">
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; text-align: center;">
+                <div style="background: white; padding: 1.5rem; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
+                    <div style="font-size: 2rem;">🍽️</div>
+                    <div id="restaurantCount" style="font-size: 1.5rem; font-weight: 600; color: var(--primary-color);">0</div>
+                    <div style="color: #666;">Restaurants</div>
+                </div>
+                <div style="background: white; padding: 1.5rem; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
+                    <div style="font-size: 2rem;">🎮</div>
+                    <div id="playAreaCount" style="font-size: 1.5rem; font-weight: 600; color: var(--primary-color);">0</div>
+                    <div style="color: #666;">With Play Areas</div>
+                </div>
+                <div style="background: white; padding: 1.5rem; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
+                    <div style="font-size: 2rem;">🌳</div>
+                    <div id="outdoorCount" style="font-size: 1.5rem; font-weight: 600; color: var(--primary-color);">0</div>
+                    <div style="color: #666;">Outdoor Seating</div>
+                </div>
+                <div style="background: white; padding: 1.5rem; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
+                    <div style="font-size: 2rem;">⭐</div>
+                    <div id="avgRating" style="font-size: 1.5rem; font-weight: 600; color: var(--primary-color);">0</div>
+                    <div style="color: #666;">Avg Rating</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Restaurant Grid -->
+    <section style="padding: 3rem 0;">
+        <div class="container">
+            <h2 style="margin-bottom: 2rem;">Top Family Restaurants in San Jose</h2>
+            <div class="restaurant-grid" id="restaurantGrid">
+                <!-- Restaurants loaded dynamically -->
+                <div class="loading-state" style="grid-column: 1 / -1; text-align: center; padding: 3rem;">
+                    <div class="loading-spinner" style="margin: 0 auto 1rem; width: 50px; height: 50px; border: 4px solid #eee; border-top-color: #e85d04; border-radius: 50%; animation: spin 1s linear infinite;"></div>
+                    <p style="color: #666;">Loading restaurants...</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Neighborhoods Section -->
+    <section style="background: var(--bg-light); padding: 3rem 0;">
+        <div class="container">
+            <h2 style="margin-bottom: 1.5rem;">Popular San Jose Neighborhoods for Families</h2>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem;">
+                <div style="background: white; padding: 1.5rem; border-radius: 8px;">
+                    <h3 style="font-size: 1.1rem; margin-bottom: 0.5rem;">Santana Row</h3>
+                    <p style="color: #666; font-size: 0.9rem;">Upscale outdoor shopping and dining destination with family-friendly restaurants, spacious patios, and entertainment.</p>
+                </div>
+                <div style="background: white; padding: 1.5rem; border-radius: 8px;">
+                    <h3 style="font-size: 1.1rem; margin-bottom: 0.5rem;">Willow Glen</h3>
+                    <p style="color: #666; font-size: 0.9rem;">Charming neighborhood with tree-lined Lincoln Avenue featuring local eateries, ice cream shops, and cozy cafes.</p>
+                </div>
+                <div style="background: white; padding: 1.5rem; border-radius: 8px;">
+                    <h3 style="font-size: 1.1rem; margin-bottom: 0.5rem;">Downtown San Jose</h3>
+                    <p style="color: #666; font-size: 0.9rem;">Urban center with diverse dining options, from casual chains to unique local restaurants near museums and parks.</p>
+                </div>
+                <div style="background: white; padding: 1.5rem; border-radius: 8px;">
+                    <h3 style="font-size: 1.1rem; margin-bottom: 0.5rem;">Japantown</h3>
+                    <p style="color: #666; font-size: 0.9rem;">One of three remaining Japantowns in the US, offering authentic Japanese restaurants, noodle shops, and cultural experiences.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Other Locations -->
+    <section style="padding: 3rem 0;">
+        <div class="container">
+            <h2 style="margin-bottom: 1.5rem;">Explore Other Bay Area Locations</h2>
+            <div style="display: flex; flex-wrap: wrap; gap: 0.75rem;">
+                <a href="/locations/san-francisco.html" class="btn btn-outline">San Francisco</a>
+                <a href="/locations/oakland.html" class="btn btn-outline">Oakland</a>
+                <a href="/locations/berkeley.html" class="btn btn-outline">Berkeley</a>
+                <a href="/locations/palo-alto.html" class="btn btn-outline">Palo Alto</a>
+                <a href="/locations/mountain-view.html" class="btn btn-outline">Mountain View</a>
+                <a href="/locations/walnut-creek.html" class="btn btn-outline">Walnut Creek</a>
+                <a href="/locations/san-mateo.html" class="btn btn-outline">San Mateo</a>
+                <a href="/locations/fremont.html" class="btn btn-outline">Fremont</a>
+                <a href="/locations/santa-clara.html" class="btn btn-outline">Santa Clara</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>Bay Area Family Eats</h4>
+                    <p>Helping families find the perfect dining experience since 2024</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Explore</h4>
+                    <ul>
+                        <li><a href="/search.html">All Restaurants</a></li>
+                        <li><a href="/guides/">Curated Guides</a></li>
+                        <li><a href="/about.html">About Us</a></li>
+                        <li><a href="/contact.html">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>For Restaurants</h4>
+                    <ul>
+                        <li><a href="/contact.html">Get Featured</a></li>
+                        <li><a href="/contact.html">Add Your Restaurant</a></li>
+                        <li><a href="/write-review.html">Write a Review</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Follow Us</h4>
+                    <div class="social-links">
+                        <a href="#" aria-label="Instagram">📷</a>
+                        <a href="#" aria-label="Facebook">👍</a>
+                        <a href="#" aria-label="Twitter">🐦</a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 Bay Area Family Eats. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <style>
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+
+    <!-- JavaScript -->
+    <script src="/js/analytics.js"></script>
+    <script src="/js/data-loader.js"></script>
+    <script src="/js/main.js"></script>
+
+    <script>
+        const LOCATION_NAME = 'San Jose';
+
+        document.addEventListener('DOMContentLoaded', async function() {
+            await DataLoader.loadData();
+            loadLocationRestaurants();
+        });
+
+        function loadLocationRestaurants() {
+            const allRestaurants = DataLoader.getRestaurants();
+            const locationRestaurants = allRestaurants.filter(r =>
+                r.location.toLowerCase() === LOCATION_NAME.toLowerCase()
+            );
+
+            // Update stats
+            document.getElementById('restaurantCount').textContent = locationRestaurants.length;
+            document.getElementById('playAreaCount').textContent =
+                locationRestaurants.filter(r => r.features.includes('playArea')).length;
+            document.getElementById('outdoorCount').textContent =
+                locationRestaurants.filter(r => r.features.includes('outdoorSeating')).length;
+
+            const avgRating = locationRestaurants.length > 0
+                ? locationRestaurants.reduce((sum, r) => sum + r.rating, 0) / locationRestaurants.length
+                : 0;
+            document.getElementById('avgRating').textContent = avgRating.toFixed(1);
+
+            // Render restaurants
+            const gridElement = document.getElementById('restaurantGrid');
+            if (locationRestaurants.length === 0) {
+                gridElement.innerHTML = `
+                    <div style="grid-column: 1 / -1; text-align: center; padding: 3rem;">
+                        <p>No restaurants found in ${LOCATION_NAME} yet. Check back soon!</p>
+                        <a href="/search.html" class="btn btn-primary" style="margin-top: 1rem;">Browse All Restaurants</a>
+                    </div>
+                `;
+                return;
+            }
+
+            gridElement.innerHTML = locationRestaurants.map(restaurant => createRestaurantCard(restaurant)).join('');
+        }
+    </script>
+</body>
+</html>

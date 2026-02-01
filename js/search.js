@@ -11,8 +11,7 @@ let currentFilters = {
 };
 
 // Initialize search and filter functionality
-function initializeSearch() {
-    // Add event listeners for filter changes
+function initializeSearchFilters() {
     const filterLocation = document.getElementById('filter-location');
     const filterCuisine = document.getElementById('filter-cuisine');
     const filterFeatures = document.getElementById('filter-features');
@@ -26,27 +25,30 @@ function initializeSearch() {
 
 // Apply filters to restaurant list
 function applyFilters() {
-    // Get current filter values
     currentFilters.location = document.getElementById('filter-location')?.value || '';
     currentFilters.cuisine = document.getElementById('filter-cuisine')?.value || '';
     currentFilters.features = document.getElementById('filter-features')?.value || '';
     currentFilters.ageRange = document.getElementById('filter-age')?.value || '';
 
-    // Filter restaurants
-    const filteredRestaurants = filterRestaurants(restaurantsData, currentFilters);
+    // Get all restaurants from DataLoader
+    const allRestaurants = DataLoader.getRestaurants();
+
+    // Apply filters
+    const filteredRestaurants = filterRestaurantsLocal(allRestaurants, currentFilters);
 
     // Update display
     const gridElement = document.getElementById('restaurantGrid') || document.getElementById('featuredGrid');
     if (gridElement) {
-        renderRestaurants(filteredRestaurants, gridElement);
+        renderSearchRestaurants(filteredRestaurants, gridElement);
+        updateResultsCount(filteredRestaurants.length);
     }
 
-    // Update URL parameters (for search page)
+    // Update URL parameters
     updateURLParams(currentFilters);
 }
 
 // Filter restaurants based on criteria
-function filterRestaurants(restaurants, filters) {
+function filterRestaurantsLocal(restaurants, filters) {
     return restaurants.filter(restaurant => {
         // Location filter
         if (filters.location && restaurant.location.toLowerCase() !== filters.location.toLowerCase()) {
@@ -58,7 +60,7 @@ function filterRestaurants(restaurants, filters) {
             return false;
         }
 
-        // Features filter
+        // Features filter (now features is an array)
         if (filters.features) {
             const featureMap = {
                 'highchairs': 'highChairs',
@@ -67,8 +69,8 @@ function filterRestaurants(restaurants, filters) {
                 'changing-table': 'changingTable',
                 'outdoor': 'outdoorSeating'
             };
-            const featureKey = featureMap[filters.features];
-            if (featureKey && !restaurant.features[featureKey]) {
+            const featureKey = featureMap[filters.features] || filters.features;
+            if (!restaurant.features.includes(featureKey)) {
                 return false;
             }
         }
@@ -78,12 +80,33 @@ function filterRestaurants(restaurants, filters) {
             return false;
         }
 
-        // Search term filter (searches in name, description, location)
+        // Search term filter
         if (filters.searchTerm) {
             const term = filters.searchTerm.toLowerCase();
-            const searchableText = `${restaurant.name} ${restaurant.description} ${restaurant.location} ${restaurant.neighborhood}`.toLowerCase();
+            const searchableText = `${restaurant.name} ${restaurant.description} ${restaurant.location} ${restaurant.neighborhood} ${restaurant.cuisine}`.toLowerCase();
             if (!searchableText.includes(term)) {
                 return false;
+            }
+        }
+
+        // Occasion filter
+        if (filters.occasion) {
+            switch (filters.occasion) {
+                case 'birthday':
+                    if (!restaurant.features.includes('birthdayParties') && !restaurant.features.includes('playArea')) {
+                        return false;
+                    }
+                    break;
+                case 'outdoor':
+                    if (!restaurant.features.includes('outdoorSeating')) {
+                        return false;
+                    }
+                    break;
+                case 'quick':
+                    if (restaurant.priceRange.length > 2 || restaurant.categoryRatings?.waitTime < 4.3) {
+                        return false;
+                    }
+                    break;
             }
         }
 
@@ -93,10 +116,15 @@ function filterRestaurants(restaurants, filters) {
 
 // Clear all filters
 function clearFilters() {
-    document.getElementById('filter-location').value = '';
-    document.getElementById('filter-cuisine').value = '';
-    document.getElementById('filter-features').value = '';
-    document.getElementById('filter-age').value = '';
+    const locationEl = document.getElementById('filter-location');
+    const cuisineEl = document.getElementById('filter-cuisine');
+    const featuresEl = document.getElementById('filter-features');
+    const ageEl = document.getElementById('filter-age');
+
+    if (locationEl) locationEl.value = '';
+    if (cuisineEl) cuisineEl.value = '';
+    if (featuresEl) featuresEl.value = '';
+    if (ageEl) ageEl.value = '';
 
     currentFilters = {
         location: '',
@@ -115,16 +143,14 @@ function performSearch() {
     const location = document.getElementById('hero-location')?.value || '';
     const occasion = document.getElementById('hero-occasion')?.value || '';
 
-    // Build search URL
     const params = new URLSearchParams();
     if (location) params.append('location', location);
     if (occasion) params.append('occasion', occasion);
 
-    // Redirect to search page
     window.location.href = `/search.html?${params.toString()}`;
 }
 
-// Update URL parameters without page reload
+// Update URL parameters
 function updateURLParams(filters) {
     if (!window.history.replaceState) return;
 
@@ -147,7 +173,7 @@ function getFiltersFromURL() {
         cuisine: params.get('cuisine') || '',
         features: params.get('features') || '',
         ageRange: params.get('ageRange') || '',
-        searchTerm: params.get('search') || '',
+        searchTerm: params.get('q') || params.get('search') || '',
         occasion: params.get('occasion') || ''
     };
 }
@@ -157,66 +183,68 @@ function applyURLFilters() {
     const urlFilters = getFiltersFromURL();
 
     // Set filter values from URL
-    if (urlFilters.location && document.getElementById('filter-location')) {
-        document.getElementById('filter-location').value = urlFilters.location;
+    const locationEl = document.getElementById('filter-location');
+    const cuisineEl = document.getElementById('filter-cuisine');
+    const featuresEl = document.getElementById('filter-features');
+    const ageEl = document.getElementById('filter-age');
+    const searchEl = document.getElementById('search-input');
+
+    if (urlFilters.location && locationEl) {
+        // Try to match location value
+        const options = Array.from(locationEl.options);
+        const match = options.find(opt =>
+            opt.value.toLowerCase() === urlFilters.location.toLowerCase() ||
+            opt.textContent.toLowerCase() === urlFilters.location.toLowerCase()
+        );
+        if (match) locationEl.value = match.value;
     }
-    if (urlFilters.cuisine && document.getElementById('filter-cuisine')) {
-        document.getElementById('filter-cuisine').value = urlFilters.cuisine;
-    }
-    if (urlFilters.features && document.getElementById('filter-features')) {
-        document.getElementById('filter-features').value = urlFilters.features;
-    }
-    if (urlFilters.ageRange && document.getElementById('filter-age')) {
-        document.getElementById('filter-age').value = urlFilters.ageRange;
-    }
+    if (urlFilters.cuisine && cuisineEl) cuisineEl.value = urlFilters.cuisine;
+    if (urlFilters.features && featuresEl) featuresEl.value = urlFilters.features;
+    if (urlFilters.ageRange && ageEl) ageEl.value = urlFilters.ageRange;
+    if (urlFilters.searchTerm && searchEl) searchEl.value = urlFilters.searchTerm;
 
     currentFilters = urlFilters;
-    applyFilters();
 }
 
 // Render restaurants to the grid
-function renderRestaurants(restaurants, gridElement) {
+function renderSearchRestaurants(restaurants, gridElement) {
     if (!gridElement) return;
 
     if (restaurants.length === 0) {
         gridElement.innerHTML = `
-            <div class="empty-state" style="grid-column: 1 / -1;">
-                <div class="empty-state-icon">🔍</div>
+            <div class="empty-state" style="grid-column: 1 / -1; text-align: center; padding: 3rem;">
+                <div class="empty-state-icon" style="font-size: 4rem;">🔍</div>
                 <h3>No restaurants found</h3>
-                <p>Try adjusting your filters or search criteria</p>
+                <p style="color: #666; margin: 1rem 0;">Try adjusting your filters or search criteria</p>
                 <button class="btn btn-primary" onclick="clearFilters()">Clear Filters</button>
             </div>
         `;
         return;
     }
 
-    gridElement.innerHTML = restaurants.map(restaurant => createRestaurantCard(restaurant)).join('');
+    gridElement.innerHTML = restaurants.map(restaurant => createSearchRestaurantCard(restaurant)).join('');
 }
 
-// Create restaurant card HTML
-function createRestaurantCard(restaurant) {
-    const features = Object.keys(restaurant.features)
-        .filter(key => restaurant.features[key] && featureIcons[key])
-        .slice(0, 4)
-        .map(key => `
+// Create restaurant card HTML for search page
+function createSearchRestaurantCard(restaurant) {
+    const featuresHTML = restaurant.features.slice(0, 4).map(f => {
+        const icon = DataLoader.featureIcons[f] || '✓';
+        const label = DataLoader.featureLabels[f] || f;
+        return `
             <span class="feature-tag">
-                <span class="feature-icon">${featureIcons[key]}</span>
-                ${featureLabels[key]}
+                <span class="feature-icon">${icon}</span>
+                ${label}
             </span>
-        `).join('');
+        `;
+    }).join('');
 
     const stars = '⭐'.repeat(Math.floor(restaurant.rating));
     const badge = restaurant.premium ? '<span class="card-badge premium">Premium</span>' :
                   restaurant.featured ? '<span class="card-badge featured">Featured</span>' : '';
 
-    // Use gradient background if no image
-    const imageStyle = restaurant.images[0] ?
-        `background-image: url('${restaurant.images[0]}')` :
-        `background: linear-gradient(135deg, #667eea 0%, #764ba2 100%)`;
-
     return `
         <div class="restaurant-card" onclick="window.location.href='/restaurants/${restaurant.slug}.html'">
-            <div class="card-image" style="${imageStyle}">
+            <div class="card-image" style="background-image: url('${restaurant.image}'); background-size: cover; background-position: center;">
                 ${badge}
             </div>
             <div class="card-content">
@@ -236,23 +264,21 @@ function createRestaurantCard(restaurant) {
                 </div>
 
                 <div class="card-features">
-                    ${features}
+                    ${featuresHTML}
                 </div>
 
                 <p class="card-description">${restaurant.description}</p>
 
-                ${restaurant.categoryRatings ? createCompactCategoryRatingsHTML(restaurant.categoryRatings, 2) : ''}
-
                 <div class="card-footer">
                     <span class="price-range">${restaurant.priceRange}</span>
-                    <span class="card-cta">View Details</span>
+                    <span class="card-cta">View Details →</span>
                 </div>
             </div>
         </div>
     `;
 }
 
-// Search functionality for search page
+// Search on page
 function performSearchOnPage() {
     const searchInput = document.getElementById('search-input');
     if (searchInput) {
@@ -282,7 +308,6 @@ function sortRestaurants(restaurants, sortBy) {
             sorted.sort((a, b) => b.priceRange.length - a.priceRange.length);
             break;
         default:
-            // Featured first
             sorted.sort((a, b) => {
                 if (a.featured && !b.featured) return -1;
                 if (!a.featured && b.featured) return 1;
@@ -296,17 +321,18 @@ function sortRestaurants(restaurants, sortBy) {
 // Handle sort change
 function handleSort() {
     const sortBy = document.getElementById('filter-sort')?.value || 'featured';
-    const filteredRestaurants = filterRestaurants(restaurantsData, currentFilters);
+    const allRestaurants = DataLoader.getRestaurants();
+    const filteredRestaurants = filterRestaurantsLocal(allRestaurants, currentFilters);
     const sortedRestaurants = sortRestaurants(filteredRestaurants, sortBy);
 
     const gridElement = document.getElementById('restaurantGrid');
     if (gridElement) {
-        renderRestaurants(sortedRestaurants, gridElement);
+        renderSearchRestaurants(sortedRestaurants, gridElement);
         updateResultsCount(sortedRestaurants.length);
     }
 }
 
-// Debounced search function
+// Debounced search
 const debounceSearch = (function() {
     let timeout;
     return function() {
@@ -317,7 +343,7 @@ const debounceSearch = (function() {
     };
 })();
 
-// Update results count display
+// Update results count
 function updateResultsCount(count) {
     const resultsCount = document.getElementById('resultsCount');
     if (resultsCount) {
@@ -325,7 +351,7 @@ function updateResultsCount(count) {
     }
 }
 
-// Toggle view between grid and list
+// Toggle view
 let currentView = 'grid';
 function toggleView(view) {
     currentView = view;
@@ -337,21 +363,18 @@ function toggleView(view) {
         if (view === 'list') {
             grid.classList.add('restaurant-list');
             grid.classList.remove('restaurant-grid');
-            listBtn?.classList.replace('btn-secondary', 'btn-outline');
-            gridBtn?.classList.replace('btn-outline', 'btn-secondary');
         } else {
             grid.classList.add('restaurant-grid');
             grid.classList.remove('restaurant-list');
-            gridBtn?.classList.replace('btn-secondary', 'btn-outline');
-            listBtn?.classList.replace('btn-outline', 'btn-secondary');
         }
     }
 }
 
-// Load more restaurants (pagination)
+// Load more restaurants
 let displayedCount = 12;
 function loadMore() {
-    const filteredRestaurants = filterRestaurants(restaurantsData, currentFilters);
+    const allRestaurants = DataLoader.getRestaurants();
+    const filteredRestaurants = filterRestaurantsLocal(allRestaurants, currentFilters);
     const sortBy = document.getElementById('filter-sort')?.value || 'featured';
     const sortedRestaurants = sortRestaurants(filteredRestaurants, sortBy);
 
@@ -360,10 +383,9 @@ function loadMore() {
 
     const gridElement = document.getElementById('restaurantGrid');
     if (gridElement) {
-        renderRestaurants(toDisplay, gridElement);
+        renderSearchRestaurants(toDisplay, gridElement);
     }
 
-    // Hide load more button if all restaurants are displayed
     if (displayedCount >= sortedRestaurants.length) {
         const loadMoreContainer = document.getElementById('loadMoreContainer');
         if (loadMoreContainer) {
@@ -372,43 +394,91 @@ function loadMore() {
     }
 }
 
+// Populate filter dropdowns dynamically
+function populateFilters() {
+    const locations = DataLoader.getLocations();
+    const cuisines = DataLoader.getCuisines();
+
+    const locationEl = document.getElementById('filter-location');
+    const cuisineEl = document.getElementById('filter-cuisine');
+
+    if (locationEl && locations.length > 0) {
+        const currentValue = locationEl.value;
+        locationEl.innerHTML = '<option value="">All Areas</option>' +
+            locations.map(loc => `<option value="${loc.toLowerCase()}">${loc}</option>`).join('');
+        if (currentValue) locationEl.value = currentValue;
+    }
+
+    if (cuisineEl && cuisines.length > 0) {
+        const currentValue = cuisineEl.value;
+        cuisineEl.innerHTML = '<option value="">All Cuisines</option>' +
+            cuisines.map(c => `<option value="${c.toLowerCase()}">${c}</option>`).join('');
+        if (currentValue) cuisineEl.value = currentValue;
+    }
+}
+
 // Initialize search page
-function initializeSearchPage() {
+async function initializeSearchPage() {
     const gridElement = document.getElementById('restaurantGrid');
 
     // Show loading state
-    if (gridElement && typeof showLoadingState === 'function') {
-        showLoadingState(gridElement);
+    if (gridElement) {
+        gridElement.innerHTML = `
+            <div class="loading-state" style="grid-column: 1 / -1; text-align: center; padding: 3rem;">
+                <div class="loading-spinner" style="margin: 0 auto 1rem; width: 50px; height: 50px; border: 4px solid #eee; border-top-color: #e85d04; border-radius: 50%; animation: spin 1s linear infinite;"></div>
+                <p style="color: #666;">Loading restaurants...</p>
+            </div>
+        `;
     }
 
-    // Simulate async load (in production this would be a real API call)
-    setTimeout(() => {
-        // Load URL filters if present
-        applyURLFilters();
+    // Load data
+    await DataLoader.loadData();
 
-        // Get filtered and sorted restaurants
-        const filteredRestaurants = filterRestaurants(restaurantsData, currentFilters);
-        const sortBy = document.getElementById('filter-sort')?.value || 'featured';
-        const sortedRestaurants = sortRestaurants(filteredRestaurants, sortBy);
+    // Populate filter dropdowns
+    populateFilters();
 
-        // Display first batch
-        const toDisplay = sortedRestaurants.slice(0, displayedCount);
-        if (gridElement) {
-            renderRestaurants(toDisplay, gridElement);
-            updateResultsCount(sortedRestaurants.length);
+    // Initialize filter listeners
+    initializeSearchFilters();
+
+    // Load URL filters if present
+    applyURLFilters();
+
+    // Get filtered and sorted restaurants
+    const allRestaurants = DataLoader.getRestaurants();
+    const filteredRestaurants = filterRestaurantsLocal(allRestaurants, currentFilters);
+    const sortBy = document.getElementById('filter-sort')?.value || 'featured';
+    const sortedRestaurants = sortRestaurants(filteredRestaurants, sortBy);
+
+    // Display restaurants
+    const toDisplay = sortedRestaurants.slice(0, displayedCount);
+    if (gridElement) {
+        renderSearchRestaurants(toDisplay, gridElement);
+        updateResultsCount(sortedRestaurants.length);
+    }
+
+    // Hide load more if not needed
+    if (sortedRestaurants.length <= displayedCount) {
+        const loadMoreContainer = document.getElementById('loadMoreContainer');
+        if (loadMoreContainer) {
+            loadMoreContainer.style.display = 'none';
         }
-
-        // Hide load more if not needed
-        if (sortedRestaurants.length <= displayedCount) {
-            const loadMoreContainer = document.getElementById('loadMoreContainer');
-            if (loadMoreContainer) {
-                loadMoreContainer.style.display = 'none';
-            }
-        }
-    }, 500);
+    }
 }
 
 // Initialize on search page load
 if (window.location.pathname.includes('search.html')) {
     document.addEventListener('DOMContentLoaded', initializeSearchPage);
+}
+
+// Add spinner animation if not exists
+if (!document.getElementById('search-spinner-keyframes')) {
+    const style = document.createElement('style');
+    style.id = 'search-spinner-keyframes';
+    style.textContent = `
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    `;
+    document.head.appendChild(style);
 }

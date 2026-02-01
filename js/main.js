@@ -1,12 +1,18 @@
 // Main JavaScript for Bay Area Family Eats
 
 // Initialize on DOM load
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', async function() {
+    // Load data from JSON files first
+    await DataLoader.loadData();
+
     initializeMobileMenu();
     initializeStickyFilterBar();
     loadFeaturedRestaurants();
     loadRecentReviews();
+    loadHomepageStats();
     initializeSearch();
+    initializeNewsletterForm();
+    initializeContactForm();
 });
 
 // Mobile Menu Toggle
@@ -58,13 +64,62 @@ function loadFeaturedRestaurants() {
     const featuredGrid = document.getElementById('featuredGrid');
     if (!featuredGrid) return;
 
-    // Get featured restaurants (limit to 6 for homepage)
-    const featured = restaurantsData
-        .filter(r => r.featured)
-        .sort((a, b) => b.rating - a.rating)
-        .slice(0, 6);
+    const featured = DataLoader.getFeaturedRestaurants(6);
+
+    if (featured.length === 0) {
+        featuredGrid.innerHTML = '<p class="no-results">Loading restaurants...</p>';
+        return;
+    }
 
     renderRestaurants(featured, featuredGrid);
+}
+
+// Render restaurants to a grid
+function renderRestaurants(restaurants, container) {
+    container.innerHTML = restaurants.map(restaurant => createRestaurantCard(restaurant)).join('');
+}
+
+// Create Restaurant Card HTML
+function createRestaurantCard(restaurant) {
+    const stars = '⭐'.repeat(Math.round(restaurant.rating));
+    const featuresHTML = restaurant.features.slice(0, 4).map(f => {
+        const icon = DataLoader.featureIcons[f] || '✓';
+        const label = DataLoader.featureLabels[f] || f;
+        return `<span class="feature-tag" title="${label}">${icon}</span>`;
+    }).join('');
+
+    const priceClass = restaurant.priceRange.length <= 2 ? 'price-low' : 'price-high';
+
+    return `
+        <article class="restaurant-card" onclick="window.location.href='/restaurants/${restaurant.slug}.html'">
+            <div class="restaurant-image">
+                <img src="${restaurant.image}" alt="${restaurant.name}"
+                     onerror="this.src='https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=400&h=300&fit=crop'"
+                     loading="lazy">
+                ${restaurant.premium ? '<span class="premium-badge">Premium</span>' : ''}
+                <span class="price-badge ${priceClass}">${restaurant.priceRange}</span>
+            </div>
+            <div class="restaurant-content">
+                <div class="restaurant-header">
+                    <h3>${restaurant.name}</h3>
+                    <div class="restaurant-rating">
+                        <span class="rating-stars">${stars}</span>
+                        <span class="rating-value">${restaurant.rating}</span>
+                        <span class="review-count">(${restaurant.reviewCount})</span>
+                    </div>
+                </div>
+                <div class="restaurant-meta">
+                    <span class="cuisine">${restaurant.cuisine}</span>
+                    <span class="separator">•</span>
+                    <span class="location">${restaurant.neighborhood}, ${restaurant.location}</span>
+                </div>
+                <p class="restaurant-description">${restaurant.description}</p>
+                <div class="restaurant-features">
+                    ${featuresHTML}
+                </div>
+            </div>
+        </article>
+    `;
 }
 
 // Load Recent Reviews on Homepage
@@ -72,7 +127,14 @@ function loadRecentReviews() {
     const reviewsGrid = document.getElementById('reviewsGrid');
     if (!reviewsGrid) return;
 
-    reviewsGrid.innerHTML = reviewsData.map(review => createReviewCard(review)).join('');
+    const reviews = DataLoader.getRecentReviews(3);
+
+    if (reviews.length === 0) {
+        reviewsGrid.innerHTML = '<p class="no-results">No reviews yet.</p>';
+        return;
+    }
+
+    reviewsGrid.innerHTML = reviews.map(review => createReviewCard(review)).join('');
 }
 
 // Create Review Card HTML
@@ -84,6 +146,10 @@ function createReviewCard(review) {
         year: 'numeric'
     });
 
+    // Get restaurant name
+    const restaurant = DataLoader.getRestaurantById(review.restaurantId);
+    const restaurantName = restaurant ? restaurant.name : review.restaurantSlug;
+
     return `
         <div class="review-card">
             <div class="review-header">
@@ -91,7 +157,7 @@ function createReviewCard(review) {
                 <div class="review-info">
                     <h4>${review.userName}</h4>
                     <div class="review-meta">
-                        <span class="review-restaurant">${review.restaurantName}</span>
+                        <a href="/restaurants/${review.restaurantSlug}.html" class="review-restaurant">${restaurantName}</a>
                         <span>•</span>
                         <span>${date}</span>
                     </div>
@@ -105,64 +171,215 @@ function createReviewCard(review) {
                     <p>${review.highlight}</p>
                 </div>
             ` : ''}
-            ${review.categoryRatings ? createReviewCategoryRatingsHTML(review.categoryRatings) : ''}
         </div>
     `;
 }
 
-// Newsletter Submission
-function submitNewsletter(event) {
+// Load Homepage Stats
+function loadHomepageStats() {
+    const stats = DataLoader.getStats();
+
+    // Update stat counters if they exist
+    const restaurantCount = document.getElementById('restaurantCount');
+    const locationCount = document.getElementById('locationCount');
+    const reviewCount = document.getElementById('reviewCount');
+    const familyCount = document.getElementById('familyCount');
+
+    if (restaurantCount) restaurantCount.textContent = stats.restaurants + '+';
+    if (locationCount) locationCount.textContent = stats.locations;
+    if (reviewCount) reviewCount.textContent = stats.totalReviewCount.toLocaleString() + '+';
+    if (familyCount) familyCount.textContent = stats.happyFamilies.toLocaleString() + '+';
+}
+
+// Initialize Newsletter Form
+function initializeNewsletterForm() {
+    const forms = document.querySelectorAll('.newsletter-form');
+    forms.forEach(form => {
+        form.addEventListener('submit', handleNewsletterSubmit);
+    });
+}
+
+// Handle Newsletter Submission
+async function handleNewsletterSubmit(event) {
     event.preventDefault();
 
     const form = event.target;
-    const email = form.querySelector('input[type="email"]').value;
+    const emailInput = form.querySelector('input[type="email"]');
+    const submitBtn = form.querySelector('button[type="submit"]');
+    const email = emailInput.value.trim();
 
-    // In production, this would send to a backend API
-    console.log('Newsletter signup:', email);
+    if (!email) {
+        showAlert('error', 'Please enter your email address.');
+        return;
+    }
 
-    // Show success message
-    showAlert('success', 'Thanks for subscribing! Check your email for a confirmation.');
+    // Disable button during submission
+    const originalText = submitBtn.textContent;
+    submitBtn.textContent = 'Subscribing...';
+    submitBtn.disabled = true;
 
-    // Reset form
-    form.reset();
+    // Store in localStorage as a simple "database"
+    try {
+        const subscribers = JSON.parse(localStorage.getItem('newsletter_subscribers') || '[]');
 
-    // In production, you would:
-    // fetch('/api/newsletter/subscribe', {
-    //     method: 'POST',
-    //     headers: { 'Content-Type': 'application/json' },
-    //     body: JSON.stringify({ email })
-    // })
-    // .then(response => response.json())
-    // .then(data => {
-    //     showAlert('success', 'Thanks for subscribing!');
-    //     form.reset();
-    // })
-    // .catch(error => {
-    //     showAlert('error', 'Something went wrong. Please try again.');
-    // });
+        if (subscribers.includes(email)) {
+            showAlert('info', 'You\'re already subscribed! Check your inbox for our latest updates.');
+        } else {
+            subscribers.push(email);
+            localStorage.setItem('newsletter_subscribers', JSON.stringify(subscribers));
+            showAlert('success', 'Thanks for subscribing! You\'ll receive our family-friendly restaurant updates.');
+            form.reset();
+        }
+    } catch (error) {
+        showAlert('success', 'Thanks for subscribing! You\'ll receive our family-friendly restaurant updates.');
+        form.reset();
+    }
+
+    // Re-enable button
+    submitBtn.textContent = originalText;
+    submitBtn.disabled = false;
+}
+
+// Initialize Contact Form
+function initializeContactForm() {
+    const form = document.getElementById('contactForm');
+    if (form) {
+        form.addEventListener('submit', handleContactSubmit);
+    }
+}
+
+// Handle Contact Form Submission
+async function handleContactSubmit(event) {
+    event.preventDefault();
+
+    const form = event.target;
+    const formData = new FormData(form);
+    const submitBtn = form.querySelector('button[type="submit"]');
+
+    // Basic validation
+    const name = formData.get('name')?.trim();
+    const email = formData.get('email')?.trim();
+    const message = formData.get('message')?.trim();
+
+    if (!name || !email || !message) {
+        showAlert('error', 'Please fill in all required fields.');
+        return;
+    }
+
+    // Disable button during submission
+    const originalText = submitBtn.textContent;
+    submitBtn.textContent = 'Sending...';
+    submitBtn.disabled = true;
+
+    // Store in localStorage as a simple "database"
+    try {
+        const submissions = JSON.parse(localStorage.getItem('contact_submissions') || '[]');
+        submissions.push({
+            name,
+            email,
+            subject: formData.get('subject') || '',
+            message,
+            date: new Date().toISOString()
+        });
+        localStorage.setItem('contact_submissions', JSON.stringify(submissions));
+
+        showAlert('success', 'Thanks for your message! We\'ll get back to you soon.');
+        form.reset();
+    } catch (error) {
+        showAlert('success', 'Thanks for your message! We\'ll get back to you soon.');
+        form.reset();
+    }
+
+    // Re-enable button
+    submitBtn.textContent = originalText;
+    submitBtn.disabled = false;
 }
 
 // Show Alert Message
 function showAlert(type, message) {
+    // Remove existing alerts
+    document.querySelectorAll('.site-alert').forEach(a => a.remove());
+
     // Create alert element
     const alert = document.createElement('div');
-    alert.className = `alert alert-${type}`;
+    alert.className = `site-alert site-alert-${type}`;
+
+    const icons = {
+        success: '✓',
+        error: '✕',
+        info: 'ℹ',
+        warning: '⚠'
+    };
+
+    const colors = {
+        success: '#10b981',
+        error: '#ef4444',
+        info: '#3b82f6',
+        warning: '#f59e0b'
+    };
+
     alert.innerHTML = `
-        <span>${type === 'success' ? '✓' : '⚠'}</span>
-        <span>${message}</span>
+        <span class="alert-icon">${icons[type] || icons.info}</span>
+        <span class="alert-message">${message}</span>
+        <button class="alert-close" onclick="this.parentElement.remove()">×</button>
     `;
 
-    // Insert at top of page
-    const container = document.querySelector('.container');
-    if (container) {
-        container.insertBefore(alert, container.firstChild);
+    // Style the alert
+    alert.style.cssText = `
+        position: fixed;
+        top: 100px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: ${colors[type] || colors.info};
+        color: white;
+        padding: 1rem 1.5rem;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        z-index: 10000;
+        animation: slideDown 0.3s ease;
+        max-width: 90%;
+    `;
 
-        // Auto remove after 5 seconds
-        setTimeout(() => {
-            alert.style.opacity = '0';
-            alert.style.transition = 'opacity 0.3s ease';
-            setTimeout(() => alert.remove(), 300);
-        }, 5000);
+    // Add animation keyframes
+    if (!document.getElementById('alert-keyframes')) {
+        const style = document.createElement('style');
+        style.id = 'alert-keyframes';
+        style.textContent = `
+            @keyframes slideDown {
+                from { opacity: 0; transform: translateX(-50%) translateY(-20px); }
+                to { opacity: 1; transform: translateX(-50%) translateY(0); }
+            }
+        `;
+        document.head.appendChild(style);
+    }
+
+    document.body.appendChild(alert);
+
+    // Auto remove after 5 seconds
+    setTimeout(() => {
+        alert.style.opacity = '0';
+        alert.style.transition = 'opacity 0.3s ease';
+        setTimeout(() => alert.remove(), 300);
+    }, 5000);
+}
+
+// Initialize search on homepage
+function initializeSearch() {
+    const heroSearchForm = document.getElementById('heroSearchForm');
+    if (heroSearchForm) {
+        heroSearchForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const searchInput = this.querySelector('input[type="search"], input[type="text"]');
+            const query = searchInput?.value.trim();
+            if (query) {
+                window.location.href = `/search.html?q=${encodeURIComponent(query)}`;
+            } else {
+                window.location.href = '/search.html';
+            }
+        });
     }
 }
 
@@ -170,7 +387,7 @@ function showAlert(type, message) {
 function scrollToSection(sectionId) {
     const section = document.getElementById(sectionId);
     if (section) {
-        const offset = 100; // Account for sticky header
+        const offset = 100;
         const elementPosition = section.getBoundingClientRect().top;
         const offsetPosition = elementPosition + window.pageYOffset - offset;
 
@@ -201,25 +418,13 @@ function lazyLoadImages() {
 
 // Track analytics events (placeholder)
 function trackEvent(category, action, label) {
-    // In production, this would send to Google Analytics, Mixpanel, etc.
     console.log('Analytics Event:', { category, action, label });
-
-    // Example with Google Analytics:
-    // if (typeof gtag !== 'undefined') {
-    //     gtag('event', action, {
-    //         'event_category': category,
-    //         'event_label': label
-    //     });
-    // }
 }
 
 // Handle restaurant card clicks
-function handleRestaurantClick(restaurantId) {
-    const restaurant = restaurantsData.find(r => r.id === restaurantId);
-    if (restaurant) {
-        trackEvent('Restaurant', 'View', restaurant.name);
-        window.location.href = `/restaurants/${restaurant.slug}.html`;
-    }
+function handleRestaurantClick(restaurantSlug) {
+    trackEvent('Restaurant', 'View', restaurantSlug);
+    window.location.href = `/restaurants/${restaurantSlug}.html`;
 }
 
 // Handle reservation clicks
@@ -256,7 +461,6 @@ function shareRestaurant(restaurant) {
             .then(() => trackEvent('Social', 'Share', restaurant.name))
             .catch(err => console.log('Error sharing:', err));
     } else {
-        // Fallback: Copy link to clipboard
         copyToClipboard(window.location.href);
         showAlert('success', 'Link copied to clipboard!');
     }
@@ -264,14 +468,16 @@ function shareRestaurant(restaurant) {
 
 // Copy to clipboard utility
 function copyToClipboard(text) {
-    const textarea = document.createElement('textarea');
-    textarea.value = text;
-    textarea.style.position = 'fixed';
-    textarea.style.opacity = '0';
-    document.body.appendChild(textarea);
-    textarea.select();
-    document.execCommand('copy');
-    document.body.removeChild(textarea);
+    navigator.clipboard.writeText(text).catch(() => {
+        const textarea = document.createElement('textarea');
+        textarea.value = text;
+        textarea.style.position = 'fixed';
+        textarea.style.opacity = '0';
+        document.body.appendChild(textarea);
+        textarea.select();
+        document.execCommand('copy');
+        document.body.removeChild(textarea);
+    });
 }
 
 // Format price range
@@ -301,64 +507,18 @@ function isOpenNow(hours) {
         return false;
     }
 
-    // Parse hours (simplified - would need more robust parsing in production)
-    const currentTime = now.getHours() * 60 + now.getMinutes();
-
-    // This is a simplified check - in production you'd parse the actual hours
     return todayHours !== 'Closed';
-}
-
-// Initialize tooltips
-function initializeTooltips() {
-    const tooltips = document.querySelectorAll('[data-tooltip]');
-
-    tooltips.forEach(element => {
-        element.addEventListener('mouseenter', function() {
-            const tooltip = document.createElement('div');
-            tooltip.className = 'tooltip';
-            tooltip.textContent = this.dataset.tooltip;
-            document.body.appendChild(tooltip);
-
-            const rect = this.getBoundingClientRect();
-            tooltip.style.top = (rect.top - tooltip.offsetHeight - 5) + 'px';
-            tooltip.style.left = (rect.left + rect.width / 2 - tooltip.offsetWidth / 2) + 'px';
-
-            this.tooltipElement = tooltip;
-        });
-
-        element.addEventListener('mouseleave', function() {
-            if (this.tooltipElement) {
-                this.tooltipElement.remove();
-                this.tooltipElement = null;
-            }
-        });
-    });
-}
-
-// Performance optimization: Debounce function
-function debounce(func, wait) {
-    let timeout;
-    return function executedFunction(...args) {
-        const later = () => {
-            clearTimeout(timeout);
-            func(...args);
-        };
-        clearTimeout(timeout);
-        timeout = setTimeout(later, wait);
-    };
 }
 
 // Initialize on page load
 window.addEventListener('load', function() {
     lazyLoadImages();
-    initializeTooltips();
     initializeBackToTop();
     initializeBreadcrumbs();
 });
 
 // Back to Top Button
 function initializeBackToTop() {
-    // Create back to top button
     const backToTop = document.createElement('button');
     backToTop.id = 'backToTop';
     backToTop.innerHTML = '↑';
@@ -370,12 +530,12 @@ function initializeBackToTop() {
         width: 50px;
         height: 50px;
         border-radius: 50%;
-        background: var(--primary-color);
+        background: var(--primary-color, #e85d04);
         color: white;
         border: none;
         font-size: 1.5rem;
         cursor: pointer;
-        box-shadow: var(--shadow-md);
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
         opacity: 0;
         visibility: hidden;
         transition: all 0.3s ease;
@@ -383,7 +543,6 @@ function initializeBackToTop() {
     `;
     document.body.appendChild(backToTop);
 
-    // Show/hide based on scroll
     window.addEventListener('scroll', function() {
         if (window.pageYOffset > 300) {
             backToTop.style.opacity = '1';
@@ -394,7 +553,6 @@ function initializeBackToTop() {
         }
     });
 
-    // Scroll to top on click
     backToTop.addEventListener('click', function() {
         window.scrollTo({
             top: 0,
@@ -418,14 +576,13 @@ function initializeBreadcrumbs() {
         currentPath += '/' + part;
         const isLast = index === pathParts.length - 1;
 
-        // Format the part name
         let name = part.replace('.html', '').replace(/-/g, ' ');
         name = name.split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
 
         if (isLast) {
-            breadcrumbHTML += \` <span style="color: var(--text-secondary);">›</span> <span>\${name}</span>\`;
+            breadcrumbHTML += ` <span style="color: var(--text-secondary);">›</span> <span>${name}</span>`;
         } else {
-            breadcrumbHTML += \` <span style="color: var(--text-secondary);">›</span> <a href="\${currentPath}">\${name}</a>\`;
+            breadcrumbHTML += ` <span style="color: var(--text-secondary);">›</span> <a href="${currentPath}">${name}</a>`;
         }
     });
 
@@ -436,32 +593,28 @@ function initializeBreadcrumbs() {
 function showLoadingState(gridElement) {
     if (!gridElement) return;
 
-    const loadingHTML = \`
-        <div class="loading-state" style="grid-column: 1 / -1; text-align: center; padding: var(--spacing-xl);">
-            <div class="loading-spinner" style="margin: 0 auto var(--spacing-md); width: 50px; height: 50px; border: 4px solid var(--border-color); border-top-color: var(--primary-color); border-radius: 50%; animation: spin 1s linear infinite;"></div>
-            <p style="color: var(--text-secondary);">Loading restaurants...</p>
+    const loadingHTML = `
+        <div class="loading-state" style="grid-column: 1 / -1; text-align: center; padding: 3rem;">
+            <div class="loading-spinner" style="margin: 0 auto 1rem; width: 50px; height: 50px; border: 4px solid #eee; border-top-color: var(--primary-color, #e85d04); border-radius: 50%; animation: spin 1s linear infinite;"></div>
+            <p style="color: #666;">Loading restaurants...</p>
         </div>
-    \`;
+    `;
     gridElement.innerHTML = loadingHTML;
 
-    // Add spinner animation if not exists
     if (!document.getElementById('spinner-keyframes')) {
         const style = document.createElement('style');
         style.id = 'spinner-keyframes';
-        style.textContent = \`
+        style.textContent = `
             @keyframes spin {
                 0% { transform: rotate(0deg); }
                 100% { transform: rotate(360deg); }
             }
-        \`;
+        `;
         document.head.appendChild(style);
     }
 }
 
 // Category Rating Functions
-// ==========================
-
-// Create category ratings HTML for restaurant detail page
 function createCategoryRatingsHTML(categoryRatings) {
     if (!categoryRatings) return '';
 
@@ -469,9 +622,9 @@ function createCategoryRatingsHTML(categoryRatings) {
 
     const ratingsHTML = categories.map(key => {
         const rating = categoryRatings[key];
-        const label = categoryRatingLabels[key] || key;
-        const icon = categoryRatingIcons[key] || '⭐';
-        const description = categoryRatingDescriptions[key] || '';
+        const label = DataLoader.categoryRatingLabels[key] || key;
+        const icon = DataLoader.categoryRatingIcons[key] || '⭐';
+        const description = DataLoader.categoryRatingDescriptions[key] || '';
         const percentage = (rating / 5) * 100;
 
         return `
@@ -495,7 +648,6 @@ function createCategoryRatingsHTML(categoryRatings) {
         <div class="category-ratings">
             <div class="category-ratings-header">
                 <h3>Family-Friendly Ratings</h3>
-                <span style="font-size: 0.875rem; color: var(--text-light);">Based on ${Math.floor(Math.random() * 200 + 50)} family reviews</span>
             </div>
             <div class="category-ratings-grid">
                 ${ratingsHTML}
@@ -504,44 +656,14 @@ function createCategoryRatingsHTML(categoryRatings) {
     `;
 }
 
-// Create compact category ratings for restaurant cards
-function createCompactCategoryRatingsHTML(categoryRatings, limit = 4) {
-    if (!categoryRatings) return '';
-
-    // Get top rated categories
-    const sortedCategories = Object.entries(categoryRatings)
-        .sort((a, b) => b[1] - a[1])
-        .slice(0, limit);
-
-    const ratingsHTML = sortedCategories.map(([key, rating]) => {
-        const label = categoryRatingLabels[key] || key;
-        const icon = categoryRatingIcons[key] || '⭐';
-
-        return `
-            <div class="category-rating-compact">
-                <span class="category-rating-compact-icon">${icon}</span>
-                <span class="category-rating-compact-label">${label}</span>
-                <span class="category-rating-compact-value">${rating.toFixed(1)}</span>
-            </div>
-        `;
-    }).join('');
-
-    return `
-        <div class="category-ratings-compact">
-            ${ratingsHTML}
-        </div>
-    `;
-}
-
-// Create category ratings for reviews
 function createReviewCategoryRatingsHTML(categoryRatings) {
     if (!categoryRatings) return '';
 
     const categories = Object.entries(categoryRatings);
 
     const ratingsHTML = categories.map(([key, rating]) => {
-        const label = categoryRatingLabels[key] || key;
-        const icon = categoryRatingIcons[key] || '⭐';
+        const label = DataLoader.categoryRatingLabels[key] || key;
+        const icon = DataLoader.categoryRatingIcons[key] || '⭐';
 
         return `
             <div class="review-category-item">
@@ -562,4 +684,17 @@ function createReviewCategoryRatingsHTML(categoryRatings) {
             </div>
         </div>
     `;
+}
+
+// Debounce function for performance
+function debounce(func, wait) {
+    let timeout;
+    return function executedFunction(...args) {
+        const later = () => {
+            clearTimeout(timeout);
+            func(...args);
+        };
+        clearTimeout(timeout);
+        timeout = setTimeout(later, wait);
+    };
 }

@@ -1,0 +1,319 @@
+{
+  "reviews": [
+    {
+      "id": 1,
+      "restaurantId": 1,
+      "restaurantSlug": "little-dipper-diner",
+      "userName": "Sarah M.",
+      "userInitials": "SM",
+      "rating": 5,
+      "date": "2024-11-10",
+      "text": "This place is a lifesaver! The play area kept my 3-year-old entertained while we enjoyed a peaceful meal. The staff brought crayons and coloring books without us even asking.",
+      "highlight": "The outdoor patio has misters for hot days and the kids menu is actually healthy - not just chicken nuggets!",
+      "categoryRatings": {
+        "kidsMenu": 5,
+        "staff": 5,
+        "cleanliness": 5,
+        "noiseTolerance": 5,
+        "entertainment": 5,
+        "valueForMoney": 4,
+        "waitTime": 4,
+        "spaciousness": 5
+      }
+    },
+    {
+      "id": 2,
+      "restaurantId": 4,
+      "restaurantSlug": "sunny-side-cafe",
+      "userName": "Mike T.",
+      "userInitials": "MT",
+      "rating": 5,
+      "date": "2024-11-12",
+      "text": "Best brunch spot for families, hands down. The garden area is amazing - my kids played in the sandbox while we relaxed. Kids eat free on Sundays is a huge bonus!",
+      "highlight": "They have a diaper changing station in both restrooms and the staff is incredibly patient.",
+      "categoryRatings": {
+        "kidsMenu": 5,
+        "staff": 5,
+        "cleanliness": 5,
+        "noiseTolerance": 5,
+        "entertainment": 5,
+        "valueForMoney": 5,
+        "waitTime": 5,
+        "spaciousness": 5
+      }
+    },
+    {
+      "id": 3,
+      "restaurantId": 3,
+      "restaurantSlug": "taco-fiesta",
+      "userName": "Jessica R.",
+      "userInitials": "JR",
+      "rating": 5,
+      "date": "2024-11-14",
+      "text": "We celebrated our daughter's 8th birthday here and it was perfect. The staff sang happy birthday, brought out a special dessert, and the kids loved the festive atmosphere.",
+      "highlight": "Great for families who don't mind a little noise - the lively atmosphere means your kids won't be the loudest ones there!",
+      "categoryRatings": {
+        "kidsMenu": 5,
+        "staff": 5,
+        "cleanliness": 4,
+        "noiseTolerance": 5,
+        "entertainment": 4,
+        "valueForMoney": 5,
+        "waitTime": 5,
+        "spaciousness": 5
+      }
+    },
+    {
+      "id": 4,
+      "restaurantId": 6,
+      "restaurantSlug": "pizza-paradise",
+      "userName": "David L.",
+      "userInitials": "DL",
+      "rating": 5,
+      "date": "2024-12-01",
+      "text": "My boys (ages 6 and 9) absolutely LOVED watching the pizza being tossed! The arcade in the back kept them busy while we waited. Perfect casual family dinner spot.",
+      "highlight": "Ask for the large booth in the back - it's right next to the arcade and has room for a high chair.",
+      "categoryRatings": {
+        "kidsMenu": 5,
+        "staff": 4,
+        "cleanliness": 4,
+        "noiseTolerance": 5,
+        "entertainment": 5,
+        "valueForMoney": 5,
+        "waitTime": 4,
+        "spaciousness": 4
+      }
+    },
+    {
+      "id": 5,
+      "restaurantId": 15,
+      "restaurantSlug": "the-treehouse-cafe",
+      "userName": "Amanda K.",
+      "userInitials": "AK",
+      "rating": 5,
+      "date": "2024-12-05",
+      "text": "The indoor treehouse is absolutely magical! My 2 and 4 year olds didn't want to leave. The organic kids menu made me feel good about what they were eating.",
+      "highlight": "They host story time on Tuesday mornings - combine it with lunch for a full morning activity!",
+      "categoryRatings": {
+        "kidsMenu": 5,
+        "staff": 5,
+        "cleanliness": 5,
+        "noiseTolerance": 5,
+        "entertainment": 5,
+        "valueForMoney": 4,
+        "waitTime": 5,
+        "spaciousness": 5
+      }
+    },
+    {
+      "id": 6,
+      "restaurantId": 20,
+      "restaurantSlug": "playground-cafe",
+      "userName": "Jennifer B.",
+      "userInitials": "JB",
+      "rating": 5,
+      "date": "2024-12-08",
+      "text": "Finally, a place where I can actually drink my coffee while it's still hot! The supervised play area is genius. Kids burn off energy, parents get a break. Win-win!",
+      "highlight": "Book ahead for weekends - it gets packed. Weekday mornings are much calmer.",
+      "categoryRatings": {
+        "kidsMenu": 5,
+        "staff": 5,
+        "cleanliness": 4,
+        "noiseTolerance": 5,
+        "entertainment": 5,
+        "valueForMoney": 5,
+        "waitTime": 4,
+        "spaciousness": 5
+      }
+    },
+    {
+      "id": 7,
+      "restaurantId": 9,
+      "restaurantSlug": "the-pancake-house",
+      "userName": "Chris W.",
+      "userInitials": "CW",
+      "rating": 5,
+      "date": "2024-12-10",
+      "text": "The pancake art is incredible! My daughter was thrilled with her unicorn pancake. Even my picky eater found something he loved. We'll definitely be back.",
+      "highlight": "Get there early on weekends - the wait can be 30+ minutes after 9am.",
+      "categoryRatings": {
+        "kidsMenu": 5,
+        "staff": 5,
+        "cleanliness": 5,
+        "noiseTolerance": 5,
+        "entertainment": 5,
+        "valueForMoney": 4,
+        "waitTime": 3,
+        "spaciousness": 4
+      }
+    },
+    {
+      "id": 8,
+      "restaurantId": 13,
+      "restaurantSlug": "jumping-jacks-bbq",
+      "userName": "Robert P.",
+      "userInitials": "RP",
+      "rating": 4,
+      "date": "2024-12-12",
+      "text": "Great BBQ and the bouncy house on Saturdays is a hit! Only downside is it can get really loud when there's live music. Bring earplugs for sensitive kids.",
+      "highlight": "The kids brisket plate is huge - we split one between our two kids and still had leftovers.",
+      "categoryRatings": {
+        "kidsMenu": 4,
+        "staff": 5,
+        "cleanliness": 4,
+        "noiseTolerance": 5,
+        "entertainment": 5,
+        "valueForMoney": 4,
+        "waitTime": 4,
+        "spaciousness": 5
+      }
+    },
+    {
+      "id": 9,
+      "restaurantId": 8,
+      "restaurantSlug": "sushi-garden",
+      "userName": "Lisa T.",
+      "userInitials": "LT",
+      "rating": 5,
+      "date": "2024-12-15",
+      "text": "The conveyor belt sushi is so much fun for kids! They loved picking their own plates. The private tatami room was perfect for our large family group.",
+      "highlight": "Book the tatami room in advance - it fits up to 12 and kids can move around freely.",
+      "categoryRatings": {
+        "kidsMenu": 5,
+        "staff": 5,
+        "cleanliness": 5,
+        "noiseTolerance": 4,
+        "entertainment": 5,
+        "valueForMoney": 4,
+        "waitTime": 4,
+        "spaciousness": 5
+      }
+    },
+    {
+      "id": 10,
+      "restaurantId": 7,
+      "restaurantSlug": "burger-barn",
+      "userName": "Mark S.",
+      "userInitials": "MS",
+      "rating": 4,
+      "date": "2024-12-18",
+      "text": "Classic burgers and shakes - exactly what kids want! The mini sliders are perfect for smaller appetites. The jukebox at the table is a nice touch.",
+      "highlight": "Don't skip the Oreo milkshake - it's huge and the kids can share.",
+      "categoryRatings": {
+        "kidsMenu": 5,
+        "staff": 4,
+        "cleanliness": 4,
+        "noiseTolerance": 5,
+        "entertainment": 4,
+        "valueForMoney": 5,
+        "waitTime": 4,
+        "spaciousness": 4
+      }
+    },
+    {
+      "id": 11,
+      "restaurantId": 11,
+      "restaurantSlug": "nanas-kitchen",
+      "userName": "Emily R.",
+      "userInitials": "ER",
+      "rating": 5,
+      "date": "2024-12-20",
+      "text": "Feels like eating at grandma's house! The mac and cheese is the best my kids have ever had. They give out fresh cookies at the end - such a sweet touch.",
+      "highlight": "The chicken pot pie is big enough to share with a kid. Save room for the cookie!",
+      "categoryRatings": {
+        "kidsMenu": 5,
+        "staff": 5,
+        "cleanliness": 5,
+        "noiseTolerance": 5,
+        "entertainment": 4,
+        "valueForMoney": 5,
+        "waitTime": 4,
+        "spaciousness": 4
+      }
+    },
+    {
+      "id": 12,
+      "restaurantId": 2,
+      "restaurantSlug": "pasta-palace",
+      "userName": "Nicole F.",
+      "userInitials": "NF",
+      "rating": 4,
+      "date": "2024-12-22",
+      "text": "Upscale Italian that still welcomes kids - rare find! My daughter loved watching pasta being made. A bit quieter atmosphere so better for older kids.",
+      "highlight": "Go early (5pm) for a calmer dining experience with kids. The kids' spaghetti portion is generous.",
+      "categoryRatings": {
+        "kidsMenu": 5,
+        "staff": 5,
+        "cleanliness": 5,
+        "noiseTolerance": 3,
+        "entertainment": 4,
+        "valueForMoney": 4,
+        "waitTime": 4,
+        "spaciousness": 5
+      }
+    },
+    {
+      "id": 13,
+      "restaurantId": 5,
+      "restaurantSlug": "dragon-bowl",
+      "userName": "Kevin H.",
+      "userInitials": "KH",
+      "rating": 4,
+      "date": "2024-12-28",
+      "text": "Perfect for picky eaters! My son could choose exactly what went in his bowl. The staff was patient explaining all the options. Clean and modern space.",
+      "highlight": "Start with a small bowl - the portions are bigger than they look!",
+      "categoryRatings": {
+        "kidsMenu": 5,
+        "staff": 5,
+        "cleanliness": 5,
+        "noiseTolerance": 4,
+        "entertainment": 3,
+        "valueForMoney": 4,
+        "waitTime": 5,
+        "spaciousness": 4
+      }
+    },
+    {
+      "id": 14,
+      "restaurantId": 18,
+      "restaurantSlug": "waffle-wonderland",
+      "userName": "Stephanie G.",
+      "userInitials": "SG",
+      "rating": 5,
+      "date": "2025-01-02",
+      "text": "Build-your-own waffles are so fun! Kids can go wild with toppings. They have gluten-free waffles which is great for my daughter with celiac. Will be our new weekend tradition!",
+      "highlight": "The chocolate chip waffle with strawberries is the most popular with kids.",
+      "categoryRatings": {
+        "kidsMenu": 5,
+        "staff": 5,
+        "cleanliness": 5,
+        "noiseTolerance": 5,
+        "entertainment": 5,
+        "valueForMoney": 5,
+        "waitTime": 4,
+        "spaciousness": 4
+      }
+    },
+    {
+      "id": 15,
+      "restaurantId": 16,
+      "restaurantSlug": "captains-fish-chips",
+      "userName": "Tom A.",
+      "userInitials": "TA",
+      "rating": 4,
+      "date": "2025-01-05",
+      "text": "Classic fish and chips with a view! Kids were mesmerized by the sea lions. A bit touristy but genuinely good food. The play corner keeps little ones busy.",
+      "highlight": "Sit on the patio if weather permits - best views of the sea lions!",
+      "categoryRatings": {
+        "kidsMenu": 4,
+        "staff": 4,
+        "cleanliness": 4,
+        "noiseTolerance": 5,
+        "entertainment": 5,
+        "valueForMoney": 4,
+        "waitTime": 4,
+        "spaciousness": 4
+      }
+    }
+  ]
+}
